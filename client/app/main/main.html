@@ -1,0 +1,26 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-xs-12">
+      Clicked Row = {{clickedRow}}
+      <br>
+      Clicked Column = {{clickedColumn}}
+    </div>
+  </div>
+
+  <div class="row" ng-repeat="row in grid track by $index">
+    <div class="col-xs-2" ng-repeat="cell in row track by $index" ng-click="cellClick($parent.$index, $index)">
+      <div class="cell">
+        CELL {{$parent.$index}} / {{$index}}
+      </div>
+    </div>
+  </div>
+</div>
+
+<i class="pointer fa fa-mouse-pointer" ng-style="{ 'top': pointerTop + 1 + 'px', 'left': pointerLeft + 1 + 'px'}"></i>
+
+pointerTop: <input type="number" ng-model="pointerTop" >
+pointerLeft: <input type="number" ng-model="pointerLeft">
+<input type="button" value="Click" ng-click="click()">
