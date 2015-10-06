@@ -25,7 +25,7 @@
 \title{T-111.5360 Research Plan:\\[5mm]
 Remote Mouse}
 
-\author{Valter Kraemer\\
+\author{Valter Kraemer 84669F \\
   Ville Skyttä\\
 Aalto-yliopisto}
 
@@ -37,7 +37,7 @@ Aalto-yliopisto}
 
 \section{Introduction}
 
-TODO
+We are going to explore how to implement a virtual mouse pointer steered on the host by another device. Communications between the devices are going to be implemneted using WebSockets. Websockets are an efficient full-duplux bidirectional communications between a server and a client that enables to create low latency connections.
 
 \section{Related work}
 
@@ -45,24 +45,41 @@ TODO
 
 \section{Research idea}
 
-TODO
+- Websockets
+- Node and Express.js
+- Client sends data to server who forwards it to host.
+- First use as embedded plugin for website
+- Investigate the option to work on any single-page app
+- First implement simple click based navigation
+- Later maybe tuoch based navigation
+
 
 \section{Working hours allocation}
 
 \begin{tabular}{|p{13mm}|p{13mm}|p{120mm}|}
   \hline
-  X h & Ville  & TODO \\ \hline
-  Y h & Valter & TODO \\ \hline
-  Z h & both   & TODO \\ \hline
+  Research plan                       & 8h    \\ \hline
+  Working basic implementation        & 48h   \\ \hline
+  State of the art                    & 10h   \\ \hline
+  Midterm Demo                        & 4h    \\ \hline
+  Fluid motion pointer movement       & 16h   \\ \hline
+  Work on any single page application & 16h   \\ \hline
+  Workshop Presentation               & 4h    \\ \hline
+  Final Report                        & 32h   \\ \hline
 \end{tabular}
 
 \section{Schedule}
 
 \begin{tabular}{|p{30mm}|p{120mm}|}
   \hline
-  x.y.2015   & TODO \\ \hline
-  3.11.2015  & Mid-term demo \\ \hline
-  8.12.2015  & Project workshop \\ \hline
+  13.10 - 29.10.2015  & Working basic impementation \\ \hline
+  20.10 - 27.10.2015  & State of the art
+  3.11.2015           & Mid-term demo \\ \hline
+  3.11 - 17.11.2015   & Fluid motion pointer movement \\ \hline
+  3.11 - 17.11.2015   & Work on any single page application \\ \hline
+  17.11 - 3.12.2015   & Bug fixes and finishing touches \\ \hline
+  8.12.2015           & Project workshop \\ \hline
+  17.11 - ?.12.2015   & Final Report
 \end{tabular}
 
 % ---------------------------------------------------------------------
