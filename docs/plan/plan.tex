@@ -41,7 +41,42 @@ We are going to explore how to implement a virtual mouse pointer steered on the 
 
 \section{Related work}
 
-\citet{bassbouss} had some related stuff... TODO
+State of the art in industry and research includes applications made
+conceptually possible by the nature of WebSockets. Another prominent
+area of research is exploration of WebSockets' performance
+characteristics and applicability in performance sensitive
+applications.
+
+\citet{throughput} explores the practical boundaries of throughput
+achievable with HTML5 applications. The study uses WebSockets and Web
+Workers.
+
+\citet{compression} compare use of several compression algorithms with
+WebSockets. WebSockets itself is an optimization over using HTTP for
+purposes it was not designed for, and utilizing compression with it
+takes the optimization one step further for some applications.
+
+\citet{http2} study the use of HTTP/2's server push functionality in
+order to improve user experience by making video streaming start
+faster in DASH. They use WebSockets for estimating bandwidth and
+compare WebSockets over HTTP/1.1 using dedicated TCP connection to
+WebSockets over HTTP/2 transport multiplexing.
+
+\citet{bassbouss} address multi-screen web application development and
+the transformation of traditional web applications to multi-screen
+capabilities. Both the current and proposed multi-screen application
+models utilize WebSocket in communications between clients (screens)
+and servers.
+
+\citet{projectrooms} present a system implementing a virtual project
+room and real-time collaboration space to facilitate remote,
+distributed teamwork. The implementation uses WebSockets for
+interclient communication and WebRTC signaling.
+
+\citet{homeappliances} introduce an architecture for remote control for
+home appliances. They address issues related to large scale deployment
+of real time systems such as scalability and operational
+costs. WebSockets is the central technology in their implementation.
 
 \section{Research idea}
 
