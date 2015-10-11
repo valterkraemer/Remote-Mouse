@@ -40,7 +40,7 @@ Aalto University}
 WebSockets is a technology providing an efficient full-duplex
 bidirectional communications channel between clients and servers. Due
 to its low latency characteristics, it is well suited for real time
-applications. The WebSocket procotol is standardized by IETF
+applications. The WebSocket protocol is standardized by IETF
 \citep{rfc} and W3C \citep{w3c} develops an API to enable its use in
 web pages.
 
@@ -88,26 +88,20 @@ and servers.
 \citet{projectrooms} present a system implementing a virtual project
 room and real-time collaboration space to facilitate remote,
 distributed teamwork. The implementation uses WebSockets for
-interclient communication and WebRTC signaling.
+inter-client communication and WebRTC signaling.
 
 \citet{homeappliances} introduce an architecture for remote control for
 home appliances. They address issues related to large scale deployment
 of real time systems such as scalability and operational
 costs. WebSockets is the central technology in their implementation.
 
-[TODO Valter: add some pointers to real world industry implementations]
+Trello (\emph{http://www.trello.com}) is a web-based project management application that uses WebSockets for realtime updating its content, like tasks, statuses and assignees. They also uses web polling as a fallback if the browser doesn't support WebSockets \citep{trello}.
 
 \section{Research idea}
 
-[TODO Valter: writeup]
+The application we are going to implement is a virtual mouse pointer for websites that can be controlled from another web enabled device. Communication between the remote device and the host device will be handled by WebSockets. The commands will be sent between the devices thru a server running Node.js with Express.js on top.
 
-- Websockets
-- Node and Express.js
-- Client sends data to server who forwards it to host.
-- First use as embedded plugin for website
-- Investigate the option to work on any single-page app
-- First implement simple click based navigation
-- Later maybe tuoch based navigation
+Our goal is to first have simple click based navigation that works on a test site. Later we want to be able to use the remote mouse on any web page using a javascript bookmark. However, the method of using javascript bookmarks won't support page transitions so it can only be used at one page at a time and on single-page web applications. Later we also want to opt-out the basic click based navigation for touch based navigation.
 
 
 \section{Working hours allocation}
@@ -128,7 +122,7 @@ costs. WebSockets is the central technology in their implementation.
 
 \begin{tabular}{|p{30mm}|p{120mm}|}
   \hline
-  13.-29.10.2015      & Working basic impementation \\ \hline
+  13.-29.10.2015      & Working basic implementation \\ \hline
   20.-27.10.2015      & State of the art \\ \hline
   3.11.2015           & Mid-term demo \\ \hline
   3.-17.11.2015       & Fluid motion pointer movement \\ \hline
