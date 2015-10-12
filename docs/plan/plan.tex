@@ -95,13 +95,28 @@ home appliances. They address issues related to large scale deployment
 of real time systems such as scalability and operational
 costs. WebSockets is the central technology in their implementation.
 
-Trello (\emph{http://www.trello.com}) is a web-based project management application that uses WebSockets for realtime updating its content, like tasks, statuses and assignees. They also uses web polling as a fallback if the browser doesn't support WebSockets \citep{trello}.
+Trello (\emph{http://www.trello.com}) is a web-based project
+management application that uses WebSockets for realtime updating its
+content, like tasks, statuses and assignees. They also use web polling
+as a fallback if the browser doesn't support WebSockets
+\citep{trello}.
 
 \section{Research idea}
 
-The application we are going to implement is a virtual mouse pointer for websites that can be controlled from another web enabled device. Communication between the remote device and the host device will be handled by WebSockets. The commands will be sent between the devices thru a server running Node.js with Express.js on top.
+The application we are going to implement is a virtual mouse pointer
+for websites that can be controlled from another web enabled device,
+typically a mobile phone or a tablet. Communication between the remote
+device and the host device will be handled by WebSockets. The commands
+will be sent between the devices thru a server running Node.js with
+Express.js on top.
 
-Our goal is to first have simple click based navigation that works on a test site. Later we want to be able to use the remote mouse on any web page using a javascript bookmark. However, the method of using javascript bookmarks won't support page transitions so it can only be used at one page at a time and on single-page web applications. Later we also want to opt-out the basic click based navigation for touch based navigation.
+Our goal is to first have simple click based navigation that works on
+a test site. Later we want to be able to use the remote mouse on any
+web page using a JavaScript bookmark. However, the method of using
+JavaScript bookmarks won't support page transitions so it can only be
+used at one page at a time and on single-page web applications. Later
+we also want to opt-out the basic click based navigation for touch
+based navigation.
 
 
 \section{Working hours allocation}
