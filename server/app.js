@@ -18,17 +18,18 @@ require('./routes')(app);
 var WebSocketServer = require("ws").Server;
 var wss = new WebSocketServer({ server: server });
 
-wss.broadcast = function(data) {
-  for (var client of this.clients)
-    client.send(data);
+wss.broadcast = function(data, sender) {
+  for (var client of this.clients) {
+    if (client != sender)
+      client.send(data);
+  }
 };
 
 wss.on("connection", function(ws) {
   console.log("New connection!");
   ws.on("message", function(msg) {
     console.log("RX: %s", msg);
-    // TODO: exclude sending client from broadcast recipients
-    wss.broadcast(msg);
+    wss.broadcast(msg, ws);
   });
 });
 
