@@ -17,6 +17,7 @@ angular.module('remoteMouseApp')
 
     $scope.pointerTop = 100;
     $scope.pointerLeft = 120;
+    $scope.pointerStep = 10;
 
     $scope.click = function() {
       console.log( document.elementFromPoint($scope.pointerLeft, $scope.pointerTop));
@@ -24,5 +25,26 @@ angular.module('remoteMouseApp')
         document.elementFromPoint($scope.pointerLeft, $scope.pointerTop).click();
       })
     }
+
+    $scope.up = function() {
+      $timeout(function() {
+        $scope.pointerTop -= $scope.pointerStep;
+      });
+    };
+    $scope.down = function() {
+      $timeout(function() {
+        $scope.pointerTop += $scope.pointerStep;
+      });
+    };
+    $scope.left = function() {
+      $timeout(function() {
+        $scope.pointerLeft -= $scope.pointerStep;
+      });
+    };
+    $scope.right = function() {
+      $timeout(function() {
+        $scope.pointerLeft += $scope.pointerStep;
+      });
+    };
 
   });

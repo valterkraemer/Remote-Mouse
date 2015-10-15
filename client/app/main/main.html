@@ -17,10 +17,31 @@
       </div>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-xs-12 text-center">
+      <input type="button" value="Up" ng-click="up()">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 text-center">
+      <input type="button" value="Left" ng-click="left()">
+      <input type="button" value="Click" ng-click="click()">
+      <input type="button" value="Right" ng-click="right()">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 text-center">
+      <input type="button" value="Down" ng-click="down()">
+    </div>
+  </div>
+
+  <div class="row text-center">
+    pointerTop: <input type="number" ng-model="pointerTop" >
+    pointerLeft: <input type="number" ng-model="pointerLeft">
+    step: <input type="number" ng-model="pointerStep">
+  </div>
+
 </div>
 
 <i class="pointer fa fa-mouse-pointer" ng-style="{ 'top': pointerTop + 1 + 'px', 'left': pointerLeft + 1 + 'px'}"></i>
-
-pointerTop: <input type="number" ng-model="pointerTop" >
-pointerLeft: <input type="number" ng-model="pointerLeft">
-<input type="button" value="Click" ng-click="click()">
