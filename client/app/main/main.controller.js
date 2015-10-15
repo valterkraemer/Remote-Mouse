@@ -14,6 +14,23 @@ angular.module('remoteMouseApp')
     };
     ws.onmessage = function(msgEvent) {
       console.log("RX: %s", msgEvent.data);
+      if (msgEvent.data === "click") {
+        $timeout(function() {
+          document.elementFromPoint($scope.pointerLeft, $scope.pointerTop).click();
+        });
+      }
+      else {
+        var match = /^pos:(-?[0-9]+),(-?[0-9]+)$/.exec(msgEvent.data);
+        if (match) {
+          $timeout(function() {
+            $scope.pointerLeft = parseInt(match[1]);
+            $scope.pointerTop = parseInt(match[2]);
+          });
+        }
+        else {
+          console.log("(ignored)");
+        }
+      }
     };
 
     $scope.grid = [[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1],[1,1,1,1,1,1]];
@@ -36,7 +53,7 @@ angular.module('remoteMouseApp')
     }
 
     var sendPosition = function() {
-      ws.send("pos:" + $scope.pointerTop + "," + $scope.pointerLeft);
+      ws.send("pos:" + $scope.pointerLeft + "," + $scope.pointerTop);
     };
 
     $scope.up = function() {
