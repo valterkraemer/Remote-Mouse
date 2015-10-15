@@ -15,6 +15,23 @@ var server = require('http').createServer(app);
 require('./config/express')(app);
 require('./routes')(app);
 
+var WebSocketServer = require("ws").Server;
+var wss = new WebSocketServer({ server: server });
+
+wss.broadcast = function(data) {
+  for (var client of this.clients)
+    client.send(data);
+};
+
+wss.on("connection", function(ws) {
+  console.log("New connection!");
+  ws.on("message", function(msg) {
+    console.log("RX: %s", msg);
+    // TODO: exclude sending client from broadcast recipients
+    wss.broadcast(msg);
+  });
+});
+
 // Start server
 server.listen(config.port, config.ip, function () {
   console.log('Express server listening on %d, in %s mode', config.port, app.get('env'));
