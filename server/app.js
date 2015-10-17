@@ -19,8 +19,9 @@ var WebSocketServer = require("ws").Server;
 var wss = new WebSocketServer({ server: server });
 
 wss.broadcast = function(data, sender) {
+  console.log("TX(%s): %s", sender.remoteMouseChannel, data);
   for (var client of this.clients) {
-    if (client != sender)
+    if (client != sender && client.remoteMouseChannel === sender.remoteMouseChannel)
       client.send(data);
   }
 };
@@ -28,8 +29,13 @@ wss.broadcast = function(data, sender) {
 wss.on("connection", function(ws) {
   console.log("New connection!");
   ws.on("message", function(msg) {
-    console.log("RX: %s", msg);
-    wss.broadcast(msg, ws);
+    console.log("RX(%s): %s", ws.remoteMouseChannel, msg);
+    if (msg.startsWith("join:")) {
+      ws.remoteMouseChannel = msg.substring("join:".length);
+    }
+    else {
+      wss.broadcast(msg, ws);
+    }
   });
 });
 

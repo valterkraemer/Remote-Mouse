@@ -44,6 +44,10 @@ angular.module('remoteMouseApp')
     $scope.pointerLeft = 120;
     $scope.pointerStep = 10;
 
+    $scope.joinChannel = function() {
+      ws.send("join:" + ($scope.channel || ""));
+    };
+
     $scope.click = function() {
       console.log( document.elementFromPoint($scope.pointerLeft, $scope.pointerTop));
       $timeout(function() {

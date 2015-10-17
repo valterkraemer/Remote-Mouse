@@ -42,6 +42,11 @@
     step: <input type="number" ng-model="pointerStep">
   </div>
 
+  <div class="row text-center">
+    <input type="text" placeholder="Channel" ng-model="channel">
+    <button ng-click="joinChannel()">Join</button>
+  </div>
+
 </div>
 
 <i class="pointer fa fa-mouse-pointer" ng-style="{ 'top': pointerTop + 1 + 'px', 'left': pointerLeft + 1 + 'px'}"></i>
