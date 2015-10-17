@@ -1,0 +1,19 @@
+15.10.2015 Ville
+
+Spent ~4h implementing basic WebSocket server and movement
+functionality. Uses the ws package hooked up to express.js. Click
+movements (positions) and clicks are dispatched to all connected
+clients.
+
+TODO: Channels/rooms; everyone connects now to the same session
+TODO: Positioning doesn't work too well for different sized browser
+      windows even on the same display... need to anchor position events
+      to something?
+
+----
+
+17.10.2015 Ville
+
+Implemented very basic channel functionality, ~1h.
+
+----
