@@ -17,3 +17,7 @@ TODO: Positioning doesn't work too well for different sized browser
 Implemented very basic channel functionality, ~1h.
 
 ----
+
+19.10.2015 Valter
+
+Wrote pointer part in pure JS without dependencies. Can also be loaded thru bookmark. ~3h
