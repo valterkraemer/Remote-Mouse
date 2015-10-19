@@ -30,7 +30,7 @@ wss.on("connection", function(ws) {
   console.log("New connection!");
   ws.on("message", function(msg) {
     console.log("RX(%s): %s", ws.remoteMouseChannel, msg);
-    if (msg.startsWith("join:")) {
+    if (msg.indexOf("join:") === 0) {
       ws.remoteMouseChannel = msg.substring("join:".length);
     }
     else {
