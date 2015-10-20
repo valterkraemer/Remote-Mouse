@@ -18,6 +18,8 @@ require('./routes')(app);
 var WebSocketServer = require("ws").Server;
 var wss = new WebSocketServer({ server: server });
 
+var channelPositions = {};
+
 wss.broadcast = function(data, sender) {
   console.log("TX(%s): %s", sender.remoteMouseChannel, data);
   for (var client of this.clients) {
@@ -33,8 +35,14 @@ wss.on("connection", function(ws) {
     console.log("RX(%s): %s", ws.remoteMouseChannel, msg);
     if (msg.indexOf("join:") === 0) {
       ws.remoteMouseChannel = msg.substring("join:".length);
+      // Send last known position on join
+      var pos = channelPositions[ws.remoteMouseChannel];
+      if (pos)
+        ws.send(pos);
     }
     else {
+      if (msg.indexOf("pos:") === 0)
+        channelPositions[ws.remoteMouseChannel] = msg;
       wss.broadcast(msg, ws);
     }
   });
