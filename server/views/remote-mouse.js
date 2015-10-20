@@ -1,11 +1,12 @@
 (function() {
   'use strict';
 
-  // TODO: store/retrieve channel in session storage
-  var channel = (prompt("Enter channel to join", "") || "");
   // TODO:
   // If we already have a socket/session open, this will open a new one.
   // Is that a bug or a feature?
+
+  var channel = (sessionStorage.getItem("remote-mouse-last-channel") || "");
+  channel = (prompt("Enter channel to join", channel) || "");
 
   var pointer = document.createElement('img');
   // Pointer tinkered from:
@@ -29,6 +30,7 @@
   ws.onopen = function() {
     console.log("WS connected");
     ws.send("join:" + channel);
+    sessionStorage.setItem("remote-mouse-last-channel", channel);
     document.body.appendChild(pointer);
   };
   ws.onmessage = function(msgEvent) {
