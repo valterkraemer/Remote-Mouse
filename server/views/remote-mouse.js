@@ -1,6 +1,9 @@
 (function() {
   'use strict';
 
+  // TODO: store/retrieve channel in session storage
+  var channel = (prompt("Enter channel to join", "") || "");
+
   var pointer = document.createElement('img');
   // Pointer tinkered from:
   // https://openclipart.org/detail/222076/white-mouse-cursor-arrow
@@ -22,6 +25,7 @@
   var ws = new WebSocket("ws://localhost:9000"); // TODO don't hardcode URL
   ws.onopen = function() {
     console.log("WS connected");
+    ws.send("join:" + channel);
     document.body.appendChild(pointer);
   };
   ws.onmessage = function(msgEvent) {
