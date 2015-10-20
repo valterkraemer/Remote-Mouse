@@ -28,6 +28,7 @@ wss.broadcast = function(data, sender) {
 
 wss.on("connection", function(ws) {
   console.log("New connection!");
+  ws.remoteMouseChannel = "";
   ws.on("message", function(msg) {
     console.log("RX(%s): %s", ws.remoteMouseChannel, msg);
     if (msg.indexOf("join:") === 0) {
