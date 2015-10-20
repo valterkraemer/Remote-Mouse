@@ -11,6 +11,10 @@ angular.module('remoteMouseApp')
     var ws = new WebSocket("ws://localhost:9000"); // TODO don't hardcode URL
     ws.onopen = function() {
       console.log("WS connected");
+      if (false) // TODO...
+      document.addEventListener("mousemove", function(evt) {
+        ws.send("pos:" + evt.clientX + "," + evt.clientY);
+      });
     };
     ws.onmessage = function(msgEvent) {
       console.log("RX: %s", msgEvent.data);
