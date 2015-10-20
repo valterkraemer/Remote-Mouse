@@ -21,3 +21,11 @@ Implemented very basic channel functionality, ~1h.
 19.10.2015 Valter
 
 Wrote pointer part in pure JS without dependencies. Can also be loaded thru bookmark. ~3h
+
+----
+
+20.10.2015 Ville
+
+~2h: pointer image data URL embed, bookmark channel prompt, last
+channel in session storage, mousemove position sending, store last
+known position per channel and send (restore) on join.
