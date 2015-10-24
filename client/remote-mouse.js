@@ -17,40 +17,68 @@
   pointer.style.width = '16px';
   pointer.style['z-index'] = 100000;
 
-  var top = 0;
-  var left = 0;
+  pointer.style.left = '100px';
+  pointer.style.top = '100px';
 
-  function updatePointerPosition() {
-    pointer.style.top = top + 'px';
-    pointer.style.left = left + 'px';
+  var pixelStep = 10;
+
+  var ws;
+  if (window.location.protocol === "https:") {
+    ws = new WebSocket("wss://remote-mouse.herokuapp.com");
+  } else {
+    ws = new WebSocket("ws://localhost:3000");
   }
-  updatePointerPosition();
 
-  var ws = new WebSocket("ws://localhost:9000"); // TODO don't hardcode URL
   ws.onopen = function() {
     console.log("WS connected");
-    ws.send("join:" + channel);
+    ws.send("register:" + channel);
     sessionStorage.setItem("remote-mouse-last-channel", channel);
     document.body.appendChild(pointer);
   };
-  ws.onmessage = function(msgEvent) {
-    console.log("RX: %s", msgEvent.data);
 
-    switch (msgEvent.data) {
+  ws.onmessage = function(msgEvent) {
+    var message = msgEvent.data;
+    console.log('RX: ', message);
+
+    var parts = message.split(':');
+
+    if (parts.length !== 2) {
+      return console.log('Not valid message');
+    }
+
+    var type = parts[0];
+    var value = parts[1];
+
+
+    switch (type) {
       case 'click':
-        console.log(document.elementFromPoint(left, top));
-        document.elementFromPoint(left - 1, top - 1).click();
+        console.log('click');
+        document.elementFromPoint(parsePx(pointer.style.left) - 1, parsePx(pointer.style.top) - 1).click();
+        break;
+      case 'step':
+        switch (value) {
+          case 'left':
+            pointer.style.left = (parsePx(pointer.style.left) - pixelStep) + 'px';
+            break;
+          case 'up':
+            pointer.style.top = (parsePx(pointer.style.top) - pixelStep) + 'px';
+            break;
+          case 'right':
+            pointer.style.left = (parsePx(pointer.style.left) + pixelStep) + 'px';
+            break;
+          case 'down':
+            pointer.style.top = (parsePx(pointer.style.top) + pixelStep) + 'px';
+            break;
+          default:
+        }
         break;
       default:
-        var match = /^pos:(-?[0-9]+),(-?[0-9]+)$/.exec(msgEvent.data);
-        if (match) {
-          top = parseInt(match[2]);
-          left = parseInt(match[1]);
-          updatePointerPosition();
-        } else {
-          console.log("(ignored)");
-        }
+        console.log('Not valid type');
     }
   };
+
+  function parsePx(value) {
+    return parseInt(value.split('px')[0]);
+  }
 
 }());
