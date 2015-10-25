@@ -17,8 +17,19 @@
   pointer.style.width = '16px';
   pointer.style['z-index'] = 100000;
 
-  pointer.style.left = '100px';
-  pointer.style.top = '100px';
+  var lastPos = sessionStorage.getItem("remote-mouse-last-position:" + channel);
+  if (lastPos) {
+    lastPos = lastPos.split(":");
+    pointer.style.left = lastPos[0];
+    pointer.style.top = lastPos[1];
+  } else {
+    pointer.style.left = '100px';
+    pointer.style.top = '100px';
+  }
+
+  window.addEventListener("unload", function() {
+    sessionStorage.setItem("remote-mouse-last-position:" + channel, pointer.style.left + ":" + pointer.style.top);
+  });
 
   var pixelStep = 10;
 

@@ -42,6 +42,7 @@ Separate page for remote
 
 25.10.2015 Ville
 
-1h: Don't hardcode URLs in anywhere but bookmarklets
+2h: Don't hardcode URLs in anywhere but bookmarklets, store last
+position per channel in sessionStorage and restore on join.
 
 ----
