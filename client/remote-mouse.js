@@ -22,12 +22,8 @@
 
   var pixelStep = 10;
 
-  var ws;
-  if (window.location.protocol === "https:") {
-    ws = new WebSocket("wss://remote-mouse.herokuapp.com");
-  } else {
-    ws = new WebSocket("ws://localhost:3000");
-  }
+  var url = ((window.location.protocol === "https:") ? "wss:" : "ws:") + window.__remoteMouseBaseUrl;
+  var ws = new WebSocket(url);
 
   ws.onopen = function() {
     console.log("WS connected");
