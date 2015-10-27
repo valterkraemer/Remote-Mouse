@@ -29,3 +29,20 @@ Wrote pointer part in pure JS without dependencies. Can also be loaded thru book
 ~2h: pointer image data URL embed, bookmark channel prompt, last
 channel in session storage, mousemove position sending, store last
 known position per channel and send (restore) on join.
+
+----
+
+24.10.2015 Valter
+
+6h: Rewrote application to remove all unneccesary dependencies.
+Made it work on heroku and on both http and https.
+Separate page for remote
+
+----
+
+25.10.2015 Ville
+
+2h: Don't hardcode URLs in anywhere but bookmarklets, store last
+position per channel in sessionStorage and restore on join.
+
+----

@@ -1,0 +1,19 @@
+body {
+  width: 170px;
+}
+
+td {
+  text-align: center;
+}
+
+i {
+  font-size: 40px;
+}
+
+#join-form  {
+  display: flex;
+}
+
+table {
+  display: none;
+}
