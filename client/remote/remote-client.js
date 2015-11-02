@@ -27,6 +27,15 @@ document.ontouchmove = function(event) {
   event.preventDefault();
 };
 
+function enableMouseMove() {
+  document.addEventListener("mousemove", sendPosition);
+  document.addEventListener("click", mouseClick);
+};
+
+function sendPosition(evt) {
+  ws.send("pos:" + evt.clientX/window.innerWidth + "," + evt.clientY/window.innerHeight);
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   FastClick.attach(document.body);
 }, false);

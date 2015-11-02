@@ -60,32 +60,51 @@
     switch (type) {
       case 'click':
         console.log('click');
-        document.elementFromPoint(parsePx(pointer.style.left) - 1, parsePx(pointer.style.top) - 1).click();
+        document.elementFromPoint(pointerLeft() - 1, pointerTop() - 1).click();
         break;
       case 'step':
         switch (value) {
           case 'left':
-            pointer.style.left = (parsePx(pointer.style.left) - pixelStep) + 'px';
+            pointer.style.left = (pointerLeft() - pixelStep) + 'px';
             break;
           case 'up':
-            pointer.style.top = (parsePx(pointer.style.top) - pixelStep) + 'px';
+            pointer.style.top = (pointerTop() - pixelStep) + 'px';
             break;
           case 'right':
-            pointer.style.left = (parsePx(pointer.style.left) + pixelStep) + 'px';
+            pointer.style.left = (pointerLeft() + pixelStep) + 'px';
             break;
           case 'down':
-            pointer.style.top = (parsePx(pointer.style.top) + pixelStep) + 'px';
+            pointer.style.top = (pointerTop() + pixelStep) + 'px';
             break;
           default:
         }
+        break;
+      case 'pos':
+        var lt = parsePos(value);
+        pointer.style.left = (lt[0]*100) + '%';
+        pointer.style.top = (lt[1]*100) + '%';
         break;
       default:
         console.log('Not valid type');
     }
   };
 
-  function parsePx(value) {
+  function parsePx(value, ref) {
+    if (value.indexOf('%') != -1)
+      return parseInt(parseFloat(value.split('%')[0])/100 * ref);
     return parseInt(value.split('px')[0]);
   }
 
+  function pointerLeft() {
+    return parsePx(pointer.style.left, window.innerWidth);
+  }
+
+  function pointerTop() {
+    return parsePx(pointer.style.top, window.innerHeight);
+  }
+
+  function parsePos(value) {
+    var lt = value.split(',');
+    return [parseFloat(lt[0]), parseFloat(lt[1])];
+  }
 }());

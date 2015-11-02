@@ -44,6 +44,7 @@
             break;
           case 'step':
           case 'click':
+          case 'pos':
             wss.broadcast(message, ws);
             break;
           default:
