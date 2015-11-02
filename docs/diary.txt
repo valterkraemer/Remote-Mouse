@@ -49,6 +49,6 @@ position per channel in sessionStorage and restore on join.
 
 2.11.2015 Ville
 
-2h: Reimplement positional mousemove movement, this time as relative.
+3h: Reimplement positional movement, this time as relative, mouse + touch.
 
 ----

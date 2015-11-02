@@ -9,9 +9,17 @@ ws.onmessage = function(msgEvent) {
   console.log("RX: %s", msgEvent.data);
 };
 
-function join() {
+function join(mouseMode) {
   document.getElementById('join-form').style.display = 'none';
   document.getElementById('navigation').style.display = 'block';
+  if (mouseMode) {
+    document.addEventListener("mousemove", sendPosition);
+    document.addEventListener("touchmove", sendTouchPosition);
+    document.addEventListener("click", mouseClick);
+  } else {
+    document.addEventListener(
+      "touchmove", function(evt) { evt.preventDefault(); });
+  }
   ws.send('join:' + document.getElementById('channel').value);
 }
 
@@ -23,17 +31,12 @@ function mouseClick() {
   ws.send("click:left");
 }
 
-document.ontouchmove = function(event) {
-  event.preventDefault();
-};
-
-function enableMouseMove() {
-  document.addEventListener("mousemove", sendPosition);
-  document.addEventListener("click", mouseClick);
-};
-
 function sendPosition(evt) {
   ws.send("pos:" + evt.clientX/window.innerWidth + "," + evt.clientY/window.innerHeight);
+}
+
+function sendTouchPosition(evt) {
+  sendPosition(evt.touches[0]);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
