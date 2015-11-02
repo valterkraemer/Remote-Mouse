@@ -1,0 +1,11 @@
+Test how different kinds of networks (mobile, localhost loopback,
+local wireless / wired) affect the UX.
+
+Test if optimizing the implementation makes any difference:
+- More efficient (binary) WS protocol
+- Turning off console logging
+
+Test if sending all / some (e.g. every Nth) mouse/touchmove positions
+affect the UX.
+
+Add measurements to get some numbers from the above, for the report.
