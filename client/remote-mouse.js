@@ -5,7 +5,7 @@
   // If we already have a socket/session open, this will open a new one.
   // Is that a bug or a feature?
 
-  var channel = (sessionStorage.getItem("remote-mouse-last-channel") || "");
+  var channel = (sessionStorage.getItem("remote-mouse-last-channel") || "test");
   channel = (prompt("Enter channel to join", channel) || "");
 
   var pointer = document.createElement('img');
