@@ -36,6 +36,8 @@ function sendPosition(evt) {
 }
 
 function sendTouchPosition(evt) {
+  evt.preventDefault();
+
   sendPosition(evt.touches[0]);
 }
 
