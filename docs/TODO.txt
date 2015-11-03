@@ -1,11 +1,27 @@
-Test how different kinds of networks (mobile, localhost loopback,
-local wireless / wired) affect the UX.
+* Test how different kinds of networks (mobile, localhost loopback,
+  local wireless / wired) affect the UX.
 
-Test if optimizing the implementation makes any difference:
-- More efficient (binary) WS protocol
-- Turning off console logging
+* Test if optimizing the implementation makes any difference:
+  - More efficient (binary) WS protocol?
+  - Turning off console logging?
+  - Packing multiple events in one message?
 
-Test if sending all / some (e.g. every Nth) mouse/touchmove positions
-affect the UX.
+* Test if sending all / some (e.g. every Nth, or at most 10/sec)
+  mouse/touchmove positions affect the UX.
 
-Add measurements to get some numbers from the above, for the report.
+* Add measurements to get some numbers from the above, for the report.
+
+* Try circumventing Content-Security-Policy (e.g. Facebook), by
+  combining all of the JS in the bookmark?
+
+* Play with several pointers?
+
+* Implement scrolling?
+
+* Make remote somewhat better looking.
+
+* Add presence indicator to remote ("is anyone listening?"), e.g. by
+  sending the info (number of connected clients on channel?) once a
+  second?
+
+* Auto-create a random channel id?
