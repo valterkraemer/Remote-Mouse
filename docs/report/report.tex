@@ -1,7 +1,7 @@
 \documentclass[12pt,a4paper,english,oneside]{article}
 
 \usepackage[utf8]{inputenc}
-\usepackage{ae,aecompl,url,natbib}
+\usepackage{ae,aecompl,url,natbib,multicol}
 \usepackage[english]{babel}
 
 \parskip 1ex
@@ -33,6 +33,8 @@ Aalto University}
 
 \maketitle
 
+\begin{multicols}{2}
+
 % ---------------------------------------------------------------------
 
 \section{Introduction}
@@ -54,5 +56,7 @@ Dummy citation just to make the build work: \citep{bassbouss}
 \bibliography{references}
 
 % ---------------------------------------------------------------------
+
+\end{multicols}
 
 \end{document}
