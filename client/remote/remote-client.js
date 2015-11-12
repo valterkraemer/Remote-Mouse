@@ -50,6 +50,7 @@ debugContainer.appendChild(latencySpan);
 
 document.body.appendChild(debugContainer);
 
+
 var latencyTimestamp;
 
 ws.onopen = function() {
@@ -65,8 +66,10 @@ ws.onmessage = function(msgEvent) {
 
   switch (type) {
     case 'pong':
-      latencySpan.innerHTML = '-';
       var ms = new Date() - latencyTimestamp;
+
+      // Timeout is to see that the text gets updated
+      latencySpan.innerHTML = '-';
       setTimeout(function() {
         latencySpan.innerHTML = 'latency: ' + ms + 'ms';
       }, 100);
@@ -81,30 +84,35 @@ function join(mouseMode) {
 
   var container = document.getElementById('container');
 
-  // If touch device
-  if ('ontouchstart' in window) {
+  // Bind touch and mouse if mm.html
+  if (mouseMode) {
 
-    var tapStart;
-    container.addEventListener("touchstart", function(e) {
-      e.preventDefault();
-      tapStart = true;
-    });
-    container.addEventListener("touchend", function(e) {
-      e.preventDefault();
+    // If touch device
+    if ('ontouchstart' in window) {
 
-      if (tapStart) {
-        ws.send("click:left");
-      }
-    });
+      // If touchmove haven't been called before touchend, it is presumed as a click
+      // e.preventDefault(); removes window scroll
 
-    container.addEventListener("touchmove", function(e) {
-      e.preventDefault();
-      tapStart = false;
+      var tapStart;
+      container.addEventListener("touchstart", function(e) {
+        e.preventDefault();
+        tapStart = true;
+      });
+      container.addEventListener("touchend", function(e) {
+        e.preventDefault();
 
-      sendPosition(e.touches[0]);
-    });
-  } else {
-    if (mouseMode) {
+        if (tapStart) {
+          ws.send("click:left");
+        }
+      });
+
+      container.addEventListener("touchmove", function(e) {
+        e.preventDefault();
+        tapStart = false;
+
+        sendPosition(e.touches[0]);
+      });
+    } else {
       container.addEventListener("click", function(e) {
         ws.send("click:left");
       });
@@ -129,6 +137,8 @@ function step(direction) {
 function mouseClick() {
   ws.send("click:left");
 }
+
+// send position at max specified times a second
 
 var lastSentMs;
 var lastPosition;
