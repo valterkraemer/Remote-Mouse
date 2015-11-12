@@ -52,3 +52,21 @@ position per channel in sessionStorage and restore on join.
 3h: Reimplement positional movement, this time as relative, mouse + touch.
 
 ----
+
+3.11.2015 Valter
+
+1h: Improved touch experience
+
+----
+
+10.11.2015 Valter
+
+3h: Trying to get pointer to change when over clickable element
+
+----
+
+12.11.2015 Valter
+
+5h: Added debug menu for changing latency, socket messages Hz, and getting latency. Also improved touch experience.
+
+----
