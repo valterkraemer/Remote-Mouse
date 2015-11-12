@@ -8,30 +8,33 @@
   <link rel="stylesheet" type="text/css" href="fontello.css">
 </head>
 <body>
-  <h1>Remote|STEP</h1>
 
-  <div id="join-form">
-    <input type="text" id="channel" value="test">
-    <button onclick="join(false)">Join</button>
+  <div id="container">
+    <h1>Remote|STEP</h1>
+
+    <div id="join-form">
+      <input type="text" id="channel" value="test">
+      <button onclick="join(false)">Join</button>
+    </div>
+
+    <table id="navigation">
+      <tr>
+        <td></td>
+        <td><i class="icon-up-circle" onclick="step('up')"></i></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td><i class="icon-left-circle" onclick="step('left')"></i></td>
+        <td><i class="icon-cancel-circle" onclick="mouseClick()"></i></td>
+        <td><i class="icon-right-circle" onclick="step('right')"></i></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td><i class="icon-down-circle" onclick="step('down')"></i></td>
+        <td></td>
+      </tr>
+    </table>
   </div>
-
-  <table id="navigation">
-    <tr>
-      <td></td>
-      <td><i class="icon-up-circle" onclick="step('up')"></i></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td><i class="icon-left-circle" onclick="step('left')"></i></td>
-      <td><i class="icon-cancel-circle" onclick="mouseClick()"></i></td>
-      <td><i class="icon-right-circle" onclick="step('right')"></i></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td><i class="icon-down-circle" onclick="step('down')"></i></td>
-      <td></td>
-    </tr>
-  </table>
 
   <script src="remote-client.js"></script>
   <script type='application/javascript' src='fastclick.js'></script>

@@ -3,21 +3,27 @@
 <head>
   <title>Remote|MM</title>
   <meta name="viewport" content="width=170, user-scalable=no, width=device-width, minimum-scale=1 maximum-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
 
   <link rel="stylesheet" type="text/css" href="style.css">
   <link rel="stylesheet" type="text/css" href="fontello.css">
 </head>
 <body>
-  <h1>Remote|MM</h1>
 
-  <div id="join-form">
-    <input type="text" id="channel" value="test">
-    <button onclick="join(true)">Join</button>
+  <div id="container">
+
+    <h1>Remote|MM</h1>
+
+    <div id="join-form">
+      <input type="text" id="channel" value="test">
+      <button onclick="join(true)">Join</button>
+    </div>
+
+    <p id="navigation">
+      Move mouse pointer and click around this window to send remote events.
+    </p>
+
   </div>
-
-  <p id="navigation">
-    Move mouse pointer and click around this window to send remote events.
-  </p>
 
   <script src="remote-client.js"></script>
   <script type='application/javascript' src='fastclick.js'></script>

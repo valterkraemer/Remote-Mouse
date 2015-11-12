@@ -19,37 +19,55 @@
     wss.on('connection', function connection(ws) {
       console.log("New connection");
 
+      var latency = 0;
+
       ws.on('message', function incoming(message) {
-        console.log('message:', message);
 
-        var parts = message.split(':');
+        setTimeout(function() {
 
-        if (parts.length !== 2) {
-          return console.log('Not valid message');
-        }
+          console.log('message:', message);
 
-        var type = parts[0];
-        var value = parts[1];
+          var parts = message.split(':');
 
-        if (!value) {
-          return console.error('Value not defined');
-        }
+          if (parts.length !== 2) {
+            return console.log('Not valid message');
+          }
 
-        switch (type) {
-          case 'register':
-            channels[value] = ws;
-            break;
-          case 'join':
-            ws.channel = value;
-            break;
-          case 'step':
-          case 'click':
-          case 'pos':
-            wss.broadcast(message, ws);
-            break;
-          default:
-            console.error('Message type "' + type + '" not supported');
-        }
+          var type = parts[0];
+          var value = parts[1];
+
+          if (!value) {
+            return console.error('Value not defined');
+          }
+
+          switch (type) {
+            case 'register':
+              channels[value] = ws;
+              break;
+            case 'join':
+              ws.channel = value;
+              break;
+            case 'step':
+            case 'click':
+            case 'pos':
+              wss.broadcast(message, ws);
+              break;
+            case 'ping':
+              ws.send('pong', function(err) {
+                if (err) console.error('err', err);
+              });
+              break;
+            case 'setLatency':
+
+              latency = value;
+
+              console.log('value', latency);
+              break;
+            default:
+              console.error('Message type "' + type + '" not supported');
+          }
+
+        }, latency);
 
       });
 
