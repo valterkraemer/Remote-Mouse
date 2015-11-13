@@ -50,6 +50,18 @@ mousePositionHzSubmit.onclick = function() {
 };
 debugContainer.appendChild(mousePositionHzSubmit);
 
+// Client logging
+loggingLabel = document.createElement("label");
+loggingLabel.appendChild(document.createTextNode("Client logging"));
+loggingBox = document.createElement("input");
+loggingBox.type = "checkbox";
+loggingBox.checked = true;
+loggingBox.onchange = function() {
+  ws.send("log:" + loggingBox.checked);
+};
+loggingLabel.appendChild(loggingBox);
+debugContainer.appendChild(loggingLabel);
+
 // Latency Span
 latencySpan = document.createElement("span");
 debugContainer.appendChild(latencySpan);

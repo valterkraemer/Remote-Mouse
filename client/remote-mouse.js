@@ -32,12 +32,13 @@
   });
 
   var pixelStep = 10;
+  var log = true;
 
   var url = ((window.location.protocol === "https:") ? "wss:" : "ws:") + window.__remoteMouseBaseUrl;
   var ws = new WebSocket(url);
 
   ws.onopen = function() {
-    console.log("WS connected");
+    if (log) console.log("WS connected");
     ws.send("register:" + channel);
     sessionStorage.setItem("remote-mouse-last-channel", channel);
     document.body.appendChild(pointer);
@@ -45,12 +46,13 @@
 
   ws.onmessage = function(msgEvent) {
     var message = msgEvent.data;
-    console.log('RX: ', message);
+    if (log) console.log('RX: ', message);
 
     var parts = message.split(':');
 
     if (parts.length !== 2) {
-      return console.log('Not valid message');
+      if (log) console.log('Not valid message');
+      return;
     }
 
     var type = parts[0];
@@ -59,7 +61,7 @@
 
     switch (type) {
       case 'click':
-        console.log('click');
+        if (log) console.log('click');
         document.elementFromPoint(pointerLeft() - 1, pointerTop() - 1).click();
         break;
       case 'step':
@@ -84,8 +86,11 @@
         pointer.style.left = (lt[0]*100) + '%';
         pointer.style.top = (lt[1]*100) + '%';
         break;
+      case 'log':
+        log = (value === 'true');
+        break;
       default:
-        console.log('Not valid type');
+        if(log) console.log('Not valid type');
     }
   };
 

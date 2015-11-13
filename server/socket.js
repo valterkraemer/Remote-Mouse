@@ -50,6 +50,7 @@
             case 'step':
             case 'click':
             case 'pos':
+            case 'log':
               wss.broadcast(message, ws);
               break;
             case 'ping':
