@@ -58,10 +58,7 @@
               });
               break;
             case 'setLatency':
-
-              latency = value;
-
-              console.log('value', latency);
+              latency = Math.max(value, 0);
               break;
             default:
               console.error('Message type "' + type + '" not supported');

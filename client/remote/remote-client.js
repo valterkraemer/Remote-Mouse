@@ -14,32 +14,38 @@ debugContainer.style.left = '0px';
 // Latency Input
 latencyInput = document.createElement("input");
 latencyInput.type = 'number';
-latencyInput.placeholder = 'Latency in ms';
+latencyInput.min = 0;
+latencyInput.style.minWidth = '150px';
+latencyInput.placeholder = latencyInput.title = 'Latency in ms';
 debugContainer.appendChild(latencyInput);
 
 // Latency Submit
 latencySubmit = document.createElement("button");
 latencySubmit.innerHTML = 'Submit';
 latencySubmit.onclick = function() {
-  ws.send("setLatency:" + latencyInput.value);
+  ws.send("setLatency:" + (latencyInput.value || 0));
 };
 debugContainer.appendChild(latencySubmit);
 
 // Mouse position sending interval Input (0 = infinity)
 mousePositionHzInput = document.createElement("input");
 mousePositionHzInput.type = 'number';
-mousePositionHzInput.placeholder = 'Mouse position Hz';
+mousePositionHzInput.min = 0;
+mousePositionHzInput.max = 1000;
+mousePositionHzInput.style.minWidth = '150px';
+mousePositionHzInput.placeholder = mousePositionHzInput.title = 'Mouse position Hz';
 debugContainer.appendChild(mousePositionHzInput);
 
 // Mouse position sending interval Submit
 mousePositionHzSubmit = document.createElement("button");
 mousePositionHzSubmit.innerHTML = 'Submit';
 mousePositionHzSubmit.onclick = function() {
-  if (parseFloat(mousePositionHzInput.value) === 0) {
+  var hz = parseFloat(mousePositionHzInput.value);
+  if (!hz) {
     mousePositionInterval = 0;
   } else {
     // Convert Hz to interval
-    mousePositionInterval = 1000 / parseFloat(mousePositionHzInput.value);
+    mousePositionInterval = 1000 / hz;
   }
 };
 debugContainer.appendChild(mousePositionHzSubmit);
