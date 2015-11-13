@@ -72,7 +72,7 @@ ws.onmessage = function(msgEvent) {
 
   switch (type) {
     case 'pong':
-      var ms = new Date() - latencyTimestamp;
+      var ms = Date.now() - latencyTimestamp;
 
       // Timeout is to see that the text gets updated
       latencySpan.innerHTML = '-';
@@ -131,7 +131,7 @@ function join(mouseMode) {
 
   // Send ping to server to get ping
   setInterval(function() {
-    latencyTimestamp = new Date();
+    latencyTimestamp = Date.now();
     ws.send("ping:null");
   }, 2000);
 }
@@ -151,8 +151,8 @@ var lastPosition;
 var mousePositionInterval = 0;
 
 function sendPosition(evt) {
-  if (!lastSentMs || lastSentMs + mousePositionInterval < (new Date()).getTime()) {
-    lastSentMs = (new Date()).getTime();
+  if (!lastSentMs || lastSentMs + mousePositionInterval < Date.now()) {
+    lastSentMs = Date.now();
     ws.send("pos:" + evt.clientX / window.innerWidth + "," + evt.clientY / window.innerHeight);
   } else {
     clearTimeout(lastPosition);
