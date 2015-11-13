@@ -3,7 +3,7 @@ var ws = new WebSocket(url);
 
 // Debug Bar
 var debugContainer = document.createElement("div");
-debugContainer.style.height = '20px';
+debugContainer.style.height = '22px';
 debugContainer.style.width = '100%';
 debugContainer.style['background-color'] = '#DDD';
 debugContainer.style['border-bottom'] = '1px solid black';
@@ -26,6 +26,8 @@ latencySubmit.onclick = function() {
   ws.send("setLatency:" + (latencyInput.value || 0));
 };
 debugContainer.appendChild(latencySubmit);
+
+debugContainer.appendChild(document.createTextNode("\u00A0"));
 
 // Mouse position sending interval Input (0 = infinity)
 mousePositionHzInput = document.createElement("input");
@@ -50,6 +52,8 @@ mousePositionHzSubmit.onclick = function() {
 };
 debugContainer.appendChild(mousePositionHzSubmit);
 
+debugContainer.appendChild(document.createTextNode("\u00A0"));
+
 // Client logging
 loggingLabel = document.createElement("label");
 loggingLabel.appendChild(document.createTextNode("Client logging"));
@@ -61,6 +65,8 @@ loggingBox.onchange = function() {
 };
 loggingLabel.appendChild(loggingBox);
 debugContainer.appendChild(loggingLabel);
+
+debugContainer.appendChild(document.createTextNode("\u00A0"));
 
 // Latency Span
 latencySpan = document.createElement("span");
