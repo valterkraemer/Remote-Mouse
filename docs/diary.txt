@@ -70,3 +70,9 @@ position per channel in sessionStorage and restore on join.
 5h: Added debug menu for changing latency, socket messages Hz, and getting latency. Also improved touch experience.
 
 ----
+
+13.11.2015 Ville
+
+2h: Debug menu tweaks, client logging toggle
+
+----
