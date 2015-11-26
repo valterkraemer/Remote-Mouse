@@ -43,6 +43,46 @@ Dummy citation just to make the build work: \citep{bassbouss}
 
 \section{Related work}
 
+Agar.io\footnote{\url{http://agar.io/}} is a massively multiplayer
+online game. In a nutshell, players control cells in a petri dish,
+attempting to grow larger by consuming pellets and other cells, and
+avoiding being consumed by other cells. The game is available for web
+browsers on its website, and Android and iOS versions are available
+for mobile devices. The web version uses an HTML canvas and its 2D
+context for rendering, as well as HTML animation frames. Communication
+between the browser and the server is implemented using
+WebSockets. Data is transferred using WebSocket binary frames
+(WebSocket opcode 2), which are constructed using the ECMAScript 6
+ArrayBuffer and DataView objects. Due to the binary nature of the
+data, the exact semantics of it are not available. During gameplay,
+the traffic consists of on the order of 50 WebSocket frames per
+second, with their sizes ranging approximately from a few to 200
+bytes.
+
+YouTube has a feature with which it is possible to control another
+YouTube window's video controls from another screen, such as a
+computer or a mobile device. It is primarly intended for controlling
+YouTube on smart TVs, but can also be used in a browser. The
+controlled screen\footnote{\url{http://www.youtube.com/tv}} is
+operated by its paired
+remote\footnote{\url{http://www.youtube.com/pair}}. The remote works
+by sending POST requests to the server that forwards them to the
+controlled window. It also uses polling every 10 seconds to check that
+the controlled device is still available. The controlled window uses
+long polling to check if any information is updated. YouTube is using
+LocalStorage for storing information about the playback device and
+different identifiers. MediaSource is used to attach sources to their
+video elements.
+
+Remot.io\footnote{\url{http://remot.io/}} is a service that controls
+HTML presentations such as
+reveal.js\footnote{\url{http://lab.hakim.se/reveal-js}} from touch
+based devices. The controlling device sends POST requests to the
+server that forwards them to the controlled device using long polling
+by the controlled device. Remote.io is using touch events for their
+remote. Swipe gestures translate to the directions the user wants to
+navigate in the slides.
+
 \section{Results}
 
 \section{Analysis}

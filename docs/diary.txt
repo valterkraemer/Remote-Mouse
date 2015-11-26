@@ -76,3 +76,9 @@ position per channel in sessionStorage and restore on join.
 2h: Debug menu tweaks, client logging toggle
 
 ----
+
+26.11.2015 Ville
+
+1h: Report work
+
+----
