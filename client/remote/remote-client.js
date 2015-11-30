@@ -54,6 +54,25 @@ debugContainer.appendChild(mousePositionHzSubmit);
 
 debugContainer.appendChild(document.createTextNode("\u00A0"));
 
+// Batch size input
+batchInput = document.createElement("input");
+batchInput.type = 'number';
+batchInput.min = 1;
+batchInput.style.minWidth = '150px';
+batchInput.placeholder = batchInput.title = 'Position batch size';
+debugContainer.appendChild(batchInput);
+
+// Batch size button
+batchSubmit = document.createElement("button");
+batchSubmit.innerHTML = 'Set';
+batchSubmit.onclick = function() {
+  sendBatchSize = batchInput.value || 1;
+  sendBuffer.length = 0;
+};
+debugContainer.appendChild(batchSubmit);
+
+debugContainer.appendChild(document.createTextNode("\u00A0"));
+
 // Client logging
 loggingLabel = document.createElement("label");
 loggingLabel.appendChild(document.createTextNode("Client logging"));
@@ -167,15 +186,25 @@ function mouseClick() {
 var lastSentMs;
 var lastPosition;
 var mousePositionInterval = 0;
+var sendBatchSize = 1;
+var sendBuffer = [];
+
+function flushSendBuffer() {
+  if (sendBuffer.length >= sendBatchSize) {
+    ws.send("pos:" + sendBuffer.join(";"));
+    sendBuffer.length = 0;
+    return true;
+  }
+  return false;
+}
 
 function sendPosition(evt) {
+  sendBuffer.push("" + evt.clientX / window.innerWidth + "," + evt.clientY / window.innerHeight);
   if (!lastSentMs || lastSentMs + mousePositionInterval < Date.now()) {
-    lastSentMs = Date.now();
-    ws.send("pos:" + evt.clientX / window.innerWidth + "," + evt.clientY / window.innerHeight);
+    if (flushSendBuffer())
+      lastSentMs = Date.now();
   } else {
     clearTimeout(lastPosition);
-    lastPosition = setTimeout(function() {
-      ws.send("pos:" + evt.clientX / window.innerWidth + "," + evt.clientY / window.innerHeight);
-    }, mousePositionInterval);
+    lastPosition = setTimeout(flushSendBuffer, mousePositionInterval);
   }
 }

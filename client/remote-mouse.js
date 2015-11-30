@@ -82,9 +82,11 @@
         }
         break;
       case 'pos':
-        var lt = parsePos(value);
-        pointer.style.left = (lt[0]*100) + '%';
-        pointer.style.top = (lt[1]*100) + '%';
+        var lts = parsePos(value);
+        for (var i in lts) {
+          pointer.style.left = (lts[i][0]*100) + '%';
+          pointer.style.top = (lts[i][1]*100) + '%';
+        }
         break;
       case 'log':
         log = (value === 'true');
@@ -109,7 +111,11 @@
   }
 
   function parsePos(value) {
-    var lt = value.split(',');
-    return [parseFloat(lt[0]), parseFloat(lt[1])];
+    var lts = value.split(';');
+    for (var i in lts) {
+      var lt = lts[i].split(',');
+      lts[i] = [parseFloat(lt[0]), parseFloat(lt[1])];
+    }
+    return lts;
   }
 }());
