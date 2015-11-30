@@ -82,11 +82,7 @@
         }
         break;
       case 'pos':
-        var lts = parsePos(value);
-        for (var i in lts) {
-          pointer.style.left = (lts[i][0]*100) + '%';
-          pointer.style.top = (lts[i][1]*100) + '%';
-        }
+        processPos(value);
         break;
       case 'log':
         log = (value === 'true');
@@ -110,12 +106,12 @@
     return parsePx(pointer.style.top, window.innerHeight);
   }
 
-  function parsePos(value) {
+  function processPos(value) {
     var lts = value.split(';');
     for (var i in lts) {
       var lt = lts[i].split(',');
-      lts[i] = [parseFloat(lt[0]), parseFloat(lt[1])];
+      pointer.style.left = parseFloat(lt[0])*100 + '%';
+      pointer.style.top = parseFloat(lt[1])*100 + '%';
     }
-    return lts;
   }
 }());
