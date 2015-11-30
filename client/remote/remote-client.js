@@ -40,7 +40,7 @@ debugContainer.appendChild(mousePositionHzInput);
 
 // Mouse position sending interval Submit
 mousePositionHzSubmit = document.createElement("button");
-mousePositionHzSubmit.innerHTML = 'Submit';
+mousePositionHzSubmit.innerHTML = 'Set';
 mousePositionHzSubmit.onclick = function() {
   var hz = parseFloat(mousePositionHzInput.value);
   if (!hz) {
