@@ -85,6 +85,6 @@ position per channel in sessionStorage and restore on join.
 
 30.11.2015 Ville
 
-1h: Position send batching
+2h: Position send batching, send every nth
 
 ----

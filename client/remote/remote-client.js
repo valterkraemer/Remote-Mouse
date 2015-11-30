@@ -73,6 +73,25 @@ debugContainer.appendChild(batchSubmit);
 
 debugContainer.appendChild(document.createTextNode("\u00A0"));
 
+// Send nth input
+nthInput = document.createElement("input");
+nthInput.type = 'number';
+nthInput.min = 1;
+nthInput.style.minWidth = '150px';
+nthInput.placeholder = nthInput.title = 'Send every Nth event';
+debugContainer.appendChild(nthInput);
+
+// Send nth button
+nthSubmit = document.createElement("button");
+nthSubmit.innerHTML = 'Set';
+nthSubmit.onclick = function() {
+  sendEveryNth = nthInput.value || 1;
+  sendBuffer.length = 0;
+};
+debugContainer.appendChild(nthSubmit);
+
+debugContainer.appendChild(document.createTextNode("\u00A0"));
+
 // Client logging
 loggingLabel = document.createElement("label");
 loggingLabel.appendChild(document.createTextNode("Client logging"));
@@ -188,6 +207,8 @@ var lastPosition;
 var mousePositionInterval = 0;
 var sendBatchSize = 1;
 var sendBuffer = [];
+var sendEveryNth = 1;
+var posCounter = 0;
 
 function flushSendBuffer() {
   if (sendBuffer.length >= sendBatchSize) {
@@ -199,6 +220,8 @@ function flushSendBuffer() {
 }
 
 function sendPosition(evt) {
+  if (posCounter++ % sendEveryNth)
+    return;
   sendBuffer.push("" + evt.clientX / window.innerWidth + "," + evt.clientY / window.innerHeight);
   if (!lastSentMs || lastSentMs + mousePositionInterval < Date.now()) {
     if (flushSendBuffer())
