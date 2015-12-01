@@ -17,12 +17,13 @@
     'background-color: #FFF',
     'transform: translate(-50%, -50%)',
     'z-index: 10001',
-    'width: 400px',
+    'width: 450px',
     'border: 1px',
     'box-shadow: 0 3px 9px rgba(0, 0, 0, .5)',
     'border-radius: 5px',
     'padding: 30px 15px',
     'font-family: Arial, Helvetica, sans-serif',
+    'font-size: 16px',
     'text-align: center',
     'color: #333'
   ].join(';');

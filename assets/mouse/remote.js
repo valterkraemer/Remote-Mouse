@@ -111,6 +111,7 @@ debugContainer.appendChild(latencySpan);
 
 document.body.appendChild(debugContainer);
 
+var container = document.getElementById('container');
 var statusElement = document.getElementById('status');
 
 var latencyTimestamp;
@@ -161,11 +162,11 @@ if ('ontouchstart' in window) {
   // e.preventDefault(); removes window scroll
 
   var tapStart;
-  document.body.addEventListener("touchstart", function(e) {
+  container.addEventListener("touchstart", function(e) {
     e.preventDefault();
     tapStart = true;
   });
-  document.body.addEventListener("touchend", function(e) {
+  container.addEventListener("touchend", function(e) {
     e.preventDefault();
 
     if (tapStart) {
@@ -173,18 +174,18 @@ if ('ontouchstart' in window) {
     }
   });
 
-  document.body.addEventListener("touchmove", function(e) {
+  container.addEventListener("touchmove", function(e) {
     e.preventDefault();
     tapStart = false;
 
     sendPosition(e.touches[0]);
   });
 } else {
-  document.body.addEventListener("click", function(e) {
+  container.addEventListener("click", function(e) {
     ws.send("click:left");
   });
 
-  document.body.addEventListener("mousemove", sendPosition);
+  container.addEventListener("mousemove", sendPosition);
 }
 
 // Send ping to server to get ping
