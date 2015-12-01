@@ -8,9 +8,15 @@
   var app = express();
   var port = process.env.PORT || 3000;
 
-  app.use('/', express.static('public'));
-  app.use('/:id', express.static('public/mouse'));
-  app.use('/step/', express.static('public/step'));
+  app.use('/assets', express.static('assets'));
+
+  app.get('/', function(req, res) {
+    res.sendFile('views/index.html', {root: './'});
+  });
+
+  app.get('/:id', function(req, res) {
+    res.sendFile('views/mouse.html', {root: './'});
+  });
 
   require('./server/socket')(server);
 
