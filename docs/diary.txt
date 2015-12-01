@@ -92,3 +92,7 @@ position per channel in sessionStorage and restore on join.
 30.11.2015 Valter
 
 6h: Rewrite/refactor access remote from url, url modal. random roomcode.
+
+1.12.2015 Valter
+
+5h: force https on heroku, status messages, scrolling both two finger and gyro. Other fixes
