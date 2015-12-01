@@ -154,7 +154,6 @@ ws.onmessage = function(msgEvent) {
   }
 };
 
-
 // If touch device
 if ('ontouchstart' in window) {
 
@@ -164,10 +163,12 @@ if ('ontouchstart' in window) {
   var tapStart;
   container.addEventListener("touchstart", function(e) {
     e.preventDefault();
+
     tapStart = true;
   });
   container.addEventListener("touchend", function(e) {
     e.preventDefault();
+    lastScrollPos = null;
 
     if (tapStart) {
       ws.send("click:left");
@@ -178,7 +179,12 @@ if ('ontouchstart' in window) {
     e.preventDefault();
     tapStart = false;
 
-    sendPosition(e.touches[0]);
+    if (e.touches.length === 2) {
+      sendScrolling(e.touches[0]);
+    } else {
+      sendPosition(e.touches[0]);
+    }
+
   });
 } else {
   container.addEventListener("click", function(e) {
@@ -232,4 +238,29 @@ function sendPosition(evt) {
     clearTimeout(lastPosition);
     lastPosition = setTimeout(flushSendBuffer, mousePositionInterval);
   }
+}
+
+var lastScrollPos;
+
+function sendScrolling(evt) {
+
+  if (!lastSentMs || lastSentMs + mousePositionInterval < Date.now()) {
+    lastSentMs = Date.now();
+    sendScrollingHelper(evt);
+  } else {
+    clearTimeout(lastPosition);
+    lastPosition = setTimeout(function() {
+      sendScrollingHelper(evt);
+    }, mousePositionInterval);
+  }
+}
+
+function sendScrollingHelper(evt) {
+  var newScrollPos = evt.clientY / window.innerHeight;
+
+  if (lastScrollPos && newScrollPos - lastScrollPos !== 0) {
+    ws.send("scroll:" + (newScrollPos - lastScrollPos).toString());
+  }
+
+  lastScrollPos = newScrollPos;
 }

@@ -90,6 +90,7 @@
             case 'click':
             case 'pos':
             case 'log':
+            case 'scroll':
               ws.sendToClient(message);
               break;
             case 'ping':
@@ -99,7 +100,7 @@
               latency = Math.max(value, 0);
               break;
             default:
-              console.error('Message type "' + type + '" not supported');
+              console.error('Message type "' + action + '" not supported');
           }
 
         }, latency);

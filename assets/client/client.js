@@ -144,6 +144,9 @@
       case 'pos':
         processPos(value);
         break;
+      case 'scroll':
+        document.body.scrollTop = document.body.scrollTop + window.innerHeight * value;
+        break;
       case 'log':
         log = (value === 'true');
         break;
