@@ -105,8 +105,7 @@
 
   ws.onmessage = function(msgEvent) {
     var message = msgEvent.data;
-    //if (log)
-    //console.log('RX: ', message);
+    if (log) console.log('RX: ', message);
 
     var parts = message.split(':');
 
@@ -150,7 +149,8 @@
       case 'roomcode':
         roomcode = value;
         sessionStorage.setItem('remote-mouse-roomcode', value);
-        urlText.innerHTML = window.location.protocol + window.__remoteMouseBaseUrl + '/' + roomcode;
+        var protocol = (window.__remoteMouseBaseUrl === '//localhost:3000' ? 'http:' : 'https:');
+        urlText.innerHTML = protocol + window.__remoteMouseBaseUrl + '/' + roomcode;
         break;
       case 'connected':
         pointer.style.display = 'block';

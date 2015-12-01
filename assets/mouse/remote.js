@@ -111,6 +111,7 @@ debugContainer.appendChild(latencySpan);
 
 document.body.appendChild(debugContainer);
 
+var statusElement = document.getElementById('status');
 
 var latencyTimestamp;
 
@@ -136,6 +137,18 @@ ws.onmessage = function(msgEvent) {
       setTimeout(function() {
         latencySpan.innerHTML = 'latency: ' + ms + 'ms';
       }, 100);
+      break;
+
+    case 'connected':
+
+      statusElement.innerHTML = 'Move mouse pointer and click around to send.';
+
+      break;
+
+    case 'disconnected':
+
+      statusElement.innerHTML = 'No client connected.';
+
       break;
   }
 };

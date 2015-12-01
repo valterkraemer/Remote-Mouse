@@ -35,8 +35,9 @@
 
               if (remotes[roomcode] && remotes[roomcode].length) {
                 remotes[roomcode].forEach(function(remote) {
-                  remote.sendToSocket('connected');
+                  remote.sendToSocket('connected:');
                 });
+                ws.sendToSocket('connected:');
               }
 
               // Send roomcode to client
@@ -44,12 +45,13 @@
 
               // Remove from connections object when client disconnected
               ws.on('close', function() {
+
                 setTimeout(function() {
                   delete clients[roomcode];
 
                   if (remotes[roomcode] && remotes[roomcode].length) {
                     remotes[roomcode].forEach(function(remote) {
-                      remote.sendToSocket('connected');
+                      remote.sendToSocket('disconnected:');
                     });
                   }
                 }, latency);
@@ -67,6 +69,7 @@
               ws.roomcode = value;
 
               if (clients[value]) {
+                ws.sendToSocket('connected:');
                 ws.sendToClient('connected:');
               }
 
