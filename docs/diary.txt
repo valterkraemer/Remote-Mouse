@@ -88,3 +88,7 @@ position per channel in sessionStorage and restore on join.
 2h: Position send batching, send every nth
 
 ----
+
+30.11.2015 Valter
+
+6h: Rewrite/refactor access remote from url, url modal. random roomcode.
