@@ -142,7 +142,10 @@ ws.onmessage = function(msgEvent) {
 
     case 'connected':
 
-      statusElement.innerHTML = 'Move mouse pointer and click around to send.';
+      statusElement.innerHTML = [
+        'You can now control client\'s mouse',
+        '<br><br>Tripple-click to toggle gyrocrolling'
+      ].join('');
 
       break;
 
@@ -161,8 +164,24 @@ if ('ontouchstart' in window) {
   // e.preventDefault(); removes window scroll
 
   var tapStart;
+  var gyroScrolling;
+
   container.addEventListener("touchstart", function(e) {
     e.preventDefault();
+
+    if (e.touches.length === 3) {
+      gyroScrolling = !gyroScrolling;
+
+      if (window.DeviceOrientationEvent) {
+        if (!gyroScrolling) {
+          window.addEventListener('deviceorientation', devOrientHandler);
+        } else {
+          window.removeEventListener('deviceorientation', devOrientHandler);
+        }
+      } else {
+        console.log('window.ondeviceorientation not supported');
+      }
+    }
 
     tapStart = true;
   });
@@ -193,6 +212,20 @@ if ('ontouchstart' in window) {
 
   container.addEventListener("mousemove", sendPosition);
 }
+
+var lastOrientationTimestamp;
+
+function devOrientHandler(event) {
+
+  if (!lastOrientationTimestamp || lastOrientationTimestamp + 10 < Date.now()) {
+    lastOrientationTimestamp = Date.now();
+
+    beta = Math.round(event.beta);
+
+    ws.send("scroll:" + (beta * -0.001).toString());
+  }
+}
+
 
 // Send ping to server to get ping
 setInterval(function() {
