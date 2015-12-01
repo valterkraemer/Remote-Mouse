@@ -80,7 +80,7 @@
   ].join(''));
 
   pointer.style.cssText = [
-    'position: absolute',
+    'position: fixed',
     'height: 20px',
     'width: 16px',
     'z-index: 100000',
