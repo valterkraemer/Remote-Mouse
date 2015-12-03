@@ -25,3 +25,52 @@
   second?
 
 * Auto-create a random channel id?
+
+
+
+
+
+
+K: Try Latency with test persons
+
+K: Try over different bandwidths
+
+Chrome did not support latency simulation
+
+Did not use frameworks (but express, ws)
+
+
+
+tell that the pointer is just an image, and click checks what element pointer is over.
+
+Store roomcode in sessionstorage.
+
+mousemove on computer, touchmove on mobile.
+
+gyro on iphone, check what devices support it.
+
+Why not work on all sites.
+
+S: Why not working on page transition (javascript injection). Maybe a plugin could fix it.
+
+S: How qr-code gets generated.
+
+K: Closure compiler, whole script in bookmark.
+
+Screen size always 100% on client and remote
+
+K: Gyro times second.
+
+S: How many times a second under normal/extreme use, browser differences.
+
+K: Browser support
+
+What have we learned:
+	* Really efficient.
+	* Pure javascript
+	* Set up project.
+	* Using sockets
+	* Gyro
+	* Little code, alot happends.
+
+Project setup, github push to heroku.
