@@ -144,7 +144,7 @@ ws.onmessage = function(msgEvent) {
 
       statusElement.innerHTML = [
         'You can now control client\'s mouse',
-        '<br><br>Tripple-click to toggle gyrocrolling'
+        '<br><br>Triple-click to toggle gyroscrolling'
       ].join('');
 
       break;
