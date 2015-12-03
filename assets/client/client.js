@@ -32,6 +32,9 @@
   goToText.innerHTML = 'Go to';
   connectionModal.appendChild(goToText);
 
+  var qrCode = document.createElement('img');
+  connectionModal.appendChild(qrCode);
+
   var urlText = document.createElement('div');
   urlText.style.cssText = [
     'font-size: 20px',
@@ -154,7 +157,9 @@
         roomcode = value;
         sessionStorage.setItem('remote-mouse-roomcode', value);
         var protocol = (window.__remoteMouseBaseUrl === '//localhost:3000' ? 'http:' : 'https:');
-        urlText.innerHTML = protocol + window.__remoteMouseBaseUrl + '/' + roomcode;
+        var roomUrl = protocol + window.__remoteMouseBaseUrl + '/' + roomcode;
+        urlText.innerHTML = roomUrl;
+        qrCode.setAttribute('src', 'https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&qzone=1&margin=10&size=120x120&ecc=L&data=' + encodeURIComponent(roomUrl));
         break;
       case 'connected':
         pointer.style.display = 'block';

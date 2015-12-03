@@ -96,3 +96,11 @@ position per channel in sessionStorage and restore on join.
 1.12.2015 Valter
 
 5h: force https on heroku, status messages, scrolling both two finger and gyro. Other fixes
+
+----
+
+3.12.2015 Ville
+
+1h: Add QR code
+
+----
