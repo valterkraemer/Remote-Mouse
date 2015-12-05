@@ -33,7 +33,25 @@
 
 K: Try Latency with test persons
 
+10 = Apple magic trackpad
+0  = unusable
+
+|  ms | Testuser 1 |  ms | Testuser 2 |  ms | Testuser 3 |
+|:---:|:----------:|:---:|:----------:|:---:|:----------:|
+| 500 |      2     | 400 |      2     |  0  |      8     |
+| 200 |      4     | 100 |      5     | 500 |      1     |
+| 100 |      5     | 300 |      4     | 300 |      4     |
+|  0  |      6     |  0  |      8     | 100 |      8     |
+| 100 |      6     | 100 |      8     |  0  |      9     |
+|  0  |      8     |  0  |      8     | 200 |      7     |
+
+Latency +- 50
+
 K: Try over different bandwidths
+
+| 2G (Heroku) | 3G (Heroku) | LTE (Heroku) | WI-FI (Heroku) | WI-FI Local network |
+|:-----------:|:-----------:|:------------:|:--------------:|:-------------------:|
+|    500ms    |     70ms    |     70ms     |      70ms      |         5ms         |
 
 Chrome did not support latency simulation
 
@@ -61,9 +79,25 @@ Screen size always 100% on client and remote
 
 K: Gyro times second.
 
+| iOS Safari |
+|:----------:|
+|    60Hz    |
+
 S: How many times a second under normal/extreme use, browser differences.
 
 K: Browser support
+
+* Sockets
+
+| IE | Firefox | Chrome | Safari | Opera | iOS Safari | Android browser |
+|:--:|:-------:|:------:|:------:|:-----:|:----------:|:---------------:|
+| 10 |    6    |   15   |    6   |  12.1 |     6.1    |       4.4       |
+
+* DeviceOrientation
+
+| IE | Firefox | Chrome | Safari | Opera | iOS Safari | Android browser |
+|:--:|:-------:|:------:|:------:|:-----:|:----------:|:---------------:|
+| 11 |    6    |   7    |    -   |   15  |     4.3    |        3        |
 
 What have we learned:
 	* Really efficient.
