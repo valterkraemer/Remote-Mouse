@@ -9,11 +9,69 @@
 </head>
 
 <body>
+
+  <div class="debug-bar-toggle">
+    <input type="checkbox" onclick="showDebugBar(this.checked)">
+  </div>
+
+  <div id="debug-bar">
+
+    <div class="input">
+      <div class="title">Latency:</div>
+      <input type="number" min="0" onchange="setLatency(this.value)" value="0">
+      <div class="unit">ms</div>
+    </div>
+
+    <div class="input">
+      <div class="title">Send interval:</div>
+      <input type="number" min="1" max="60" onchange="setHz(this.value)" value="60">
+      <div class="unit">Hz</div>
+    </div>
+
+    <div class="input">
+      <div class="title">Batch size:</div>
+      <input type="number" min="1" onchange="setBatchSize(this.value)" value="1">
+    </div>
+
+    <div class="input">
+      <div class="title">Send Nth event:</div>
+      <input type="number" min="1" onchange="setNthEvent(this.value)" value="1">
+    </div>
+
+    <div class="input">
+      <label class="title">Client logging:
+        <input type="checkbox" checked="true">
+      </label>
+    </div>
+
+    <div class="input" id="latency"></div>
+
+  </div>
+
   <div id="container">
-    <div id="status">
+    <div id="disconnected">
+      Not connected to server
+    </div>
+    <div id="no-client">
       No client connected
     </div>
+    <div id="gyro-unsupported">
+      You can now control client's mouse,
+      <br>
+      <br>This device does not support gyroscrolling
+    </div>
+    <div id="gyro-off">
+      You can now control client's mouse,
+      <br>
+      <br>Triple-click to <b>turn on</b> gyroscrolling
+    </div>
+    <div id="gyro-on">
+      You can now control client's mouse,
+      <br>
+      <br>Triple-click to <b>turn off</b> gyroscrolling
+    </div>
   </div>
+
   <script src="/assets/mouse/remote.js"></script>
 </body>
 

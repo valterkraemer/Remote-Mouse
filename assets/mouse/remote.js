@@ -1,129 +1,69 @@
 var url = ((window.location.protocol === "https:") ? "wss" : "ws") + "://" + window.location.host;
 var ws = new WebSocket(url);
 
-// Debug Bar
-var debugContainer = document.createElement("div");
-debugContainer.style.width = '100%';
-debugContainer.style['background-color'] = '#DDD';
-debugContainer.style['border-bottom'] = '1px solid black';
-debugContainer.style.position = 'absolute';
-debugContainer.style.top = '0px';
-debugContainer.style.left = '0px';
-
-// Latency Input
-latencyInput = document.createElement("input");
-latencyInput.type = 'number';
-latencyInput.min = 0;
-latencyInput.style.minWidth = '150px';
-latencyInput.placeholder = latencyInput.title = 'Latency in ms';
-debugContainer.appendChild(latencyInput);
-
-// Latency Submit
-latencySubmit = document.createElement("button");
-latencySubmit.innerHTML = 'Submit';
-latencySubmit.onclick = function() {
-  ws.send("setLatency:" + (latencyInput.value || 0));
-};
-debugContainer.appendChild(latencySubmit);
-
-debugContainer.appendChild(document.createTextNode("\u00A0"));
-
-// Mouse position sending interval Input (0 = infinity)
-mousePositionHzInput = document.createElement("input");
-mousePositionHzInput.type = 'number';
-mousePositionHzInput.min = 0;
-mousePositionHzInput.max = 1000;
-mousePositionHzInput.style.minWidth = '150px';
-mousePositionHzInput.placeholder = mousePositionHzInput.title = 'Mouse position Hz';
-debugContainer.appendChild(mousePositionHzInput);
-
-// Mouse position sending interval Submit
-mousePositionHzSubmit = document.createElement("button");
-mousePositionHzSubmit.innerHTML = 'Set';
-mousePositionHzSubmit.onclick = function() {
-  var hz = parseFloat(mousePositionHzInput.value);
-  if (!hz) {
-    mousePositionInterval = 0;
-  } else {
-    // Convert Hz to interval
-    mousePositionInterval = 1000 / hz;
-  }
-};
-debugContainer.appendChild(mousePositionHzSubmit);
-
-debugContainer.appendChild(document.createTextNode("\u00A0"));
-
-// Batch size input
-batchInput = document.createElement("input");
-batchInput.type = 'number';
-batchInput.min = 1;
-batchInput.style.minWidth = '150px';
-batchInput.placeholder = batchInput.title = 'Position batch size';
-debugContainer.appendChild(batchInput);
-
-// Batch size button
-batchSubmit = document.createElement("button");
-batchSubmit.innerHTML = 'Set';
-batchSubmit.onclick = function() {
-  sendBatchSize = batchInput.value || 1;
-  sendBuffer.length = 0;
-};
-debugContainer.appendChild(batchSubmit);
-
-debugContainer.appendChild(document.createTextNode("\u00A0"));
-
-// Send nth input
-nthInput = document.createElement("input");
-nthInput.type = 'number';
-nthInput.min = 1;
-nthInput.style.minWidth = '150px';
-nthInput.placeholder = nthInput.title = 'Send every Nth event';
-debugContainer.appendChild(nthInput);
-
-// Send nth button
-nthSubmit = document.createElement("button");
-nthSubmit.innerHTML = 'Set';
-nthSubmit.onclick = function() {
-  sendEveryNth = nthInput.value || 1;
-  sendBuffer.length = 0;
-};
-debugContainer.appendChild(nthSubmit);
-
-debugContainer.appendChild(document.createTextNode("\u00A0"));
-
-// Client logging
-loggingLabel = document.createElement("label");
-loggingLabel.appendChild(document.createTextNode("Client logging"));
-loggingBox = document.createElement("input");
-loggingBox.type = "checkbox";
-loggingBox.checked = true;
-loggingBox.onchange = function() {
-  ws.send("log:" + loggingBox.checked);
-};
-loggingLabel.appendChild(loggingBox);
-debugContainer.appendChild(loggingLabel);
-
-debugContainer.appendChild(document.createTextNode("\u00A0"));
-
-// Latency Span
-latencySpan = document.createElement("span");
-debugContainer.appendChild(latencySpan);
-
-document.body.appendChild(debugContainer);
-
 var container = document.getElementById('container');
-var statusElement = document.getElementById('status');
+var latencySpan = document.getElementById('latency');
 
+/*// How many times a second something is called
+var eventCounter = 0;
+setInterval(function() {
+console.info('called', eventCounter);
+eventCounter = 0;
+}, 1000);*/
+
+//eventCounter++;
+
+var clicking = false;
+var gyroScrolling = false;
 var latencyTimestamp;
+var lastScrollPos;
+var lastOrientationTimestamp;
 
-ws.onopen = function() {
+var lastSentMs;
+var lastPosition;
+var sendInterval = 1000 / 60;
+var sendBatchSize = 1;
+var sendBuffer = [];
+var sendEveryNth = 1;
+var posCounter = 0;
+
+
+ws.onopen = onopen;
+ws.onmessage = onmessage;
+ws.onclose = function(e) {
+  setStatus('disconnected');
+};
+
+
+// Check if touch device
+if ('ontouchstart' in window) {
+
+  // If touchmove haven't been called before touchend, it is presumed as a click
+  container.addEventListener("touchstart", touchstart);
+  container.addEventListener("touchmove", touchmove);
+  container.addEventListener("touchend", touchend);
+} else {
+  container.addEventListener("mousemove", sendPosition);
+  container.addEventListener("click", function() {
+    ws.send("click:left");
+  });
+}
+
+function onopen() {
   console.log("WS connected");
 
-  ws.send('join:' + window.location.href.split('/')[3]);
-};
+  setStatus('no-client');
 
-ws.onmessage = function(msgEvent) {
-  console.log('RX:', msgEvent.data);
+  ws.send('join:' + window.location.href.split('/')[3]);
+
+  setInterval(function sendPing() {
+    latencyTimestamp = Date.now();
+    ws.send("ping:null");
+  }, 2000);
+}
+
+function onmessage(msgEvent) {
+  //console.log('RX:', msgEvent.data);
 
   var parts = msgEvent.data.split(':');
   var type = parts[0];
@@ -132,124 +72,75 @@ ws.onmessage = function(msgEvent) {
   switch (type) {
     case 'pong':
       var ms = Date.now() - latencyTimestamp;
+      latencySpan.innerHTML = '-';
+
+      console.info('latency - ' + ms);
 
       // Timeout is to see that the text gets updated
-      latencySpan.innerHTML = '-';
       setTimeout(function() {
         latencySpan.innerHTML = 'latency: ' + ms + 'ms';
       }, 100);
       break;
 
     case 'connected':
-
-      statusElement.innerHTML = [
-        'You can now control client\'s mouse',
-        '<br><br>Triple-click to toggle gyroscrolling'
-      ].join('');
-
-      break;
-
-    case 'disconnected':
-
-      statusElement.innerHTML = 'No client connected.';
-
+    case 'no-client':
+      setStatus(type);
       break;
   }
-};
+}
 
-// If touch device
-if ('ontouchstart' in window) {
+function touchstart(e) {
+  e.preventDefault();
 
-  // If touchmove haven't been called before touchend, it is presumed as a click
-  // e.preventDefault(); removes window scroll
+  clicking = true;
 
-  var tapStart;
-  var gyroScrolling;
+  if (e.touches.length === 3 && window.DeviceOrientationEvent) {
+    clicking = false;
+    gyroScrolling = !gyroScrolling;
 
-  container.addEventListener("touchstart", function(e) {
-    e.preventDefault();
-
-    if (e.touches.length === 3) {
-      gyroScrolling = !gyroScrolling;
-
-      if (window.DeviceOrientationEvent) {
-        if (!gyroScrolling) {
-          window.addEventListener('deviceorientation', devOrientHandler);
-        } else {
-          window.removeEventListener('deviceorientation', devOrientHandler);
-        }
-      } else {
-        console.log('window.ondeviceorientation not supported');
-      }
-    }
-
-    tapStart = true;
-  });
-  container.addEventListener("touchend", function(e) {
-    e.preventDefault();
-    lastScrollPos = null;
-
-    if (tapStart) {
-      ws.send("click:left");
-    }
-  });
-
-  container.addEventListener("touchmove", function(e) {
-    e.preventDefault();
-    tapStart = false;
-
-    if (e.touches.length === 2) {
-      sendScrolling(e.touches[0]);
+    if (!gyroScrolling) {
+      setStatus('gyro-off');
+      window.removeEventListener('deviceorientation', devOrientHandler);
     } else {
-      sendPosition(e.touches[0]);
+      setStatus('gyro-on');
+      lastOrientationTimestamp = Date.now();
+      window.addEventListener('deviceorientation', devOrientHandler);
     }
-
-  });
-} else {
-  container.addEventListener("click", function(e) {
-    ws.send("click:left");
-  });
-
-  container.addEventListener("mousemove", sendPosition);
-}
-
-var lastOrientationTimestamp;
-
-function devOrientHandler(event) {
-
-  if (!lastOrientationTimestamp || lastOrientationTimestamp + 10 < Date.now()) {
-    lastOrientationTimestamp = Date.now();
-
-    beta = Math.round(event.beta);
-
-    ws.send("scroll:" + (beta * -0.001).toString());
   }
 }
 
+function touchmove(e) {
+  e.preventDefault(); // removes window scroll
 
-// Send ping to server to get ping
-setInterval(function() {
-  latencyTimestamp = Date.now();
-  ws.send("ping:null");
-}, 2000);
+  clicking = false;
 
-function step(direction) {
-  ws.send("step:" + direction);
+  if (e.touches.length === 2) {
+    return sendScrolling(e.touches[0]);
+  }
+  sendPosition(e.touches[0]);
 }
 
-function mouseClick() {
-  ws.send("click:left");
+function touchend(e) {
+  e.preventDefault();
+  lastScrollPos = null;
+
+  if (clicking) {
+    ws.send("click:left");
+  }
 }
 
-// send position at max specified times a second
+function devOrientHandler(e) {
 
-var lastSentMs;
-var lastPosition;
-var mousePositionInterval = 0;
-var sendBatchSize = 1;
-var sendBuffer = [];
-var sendEveryNth = 1;
-var posCounter = 0;
+  if (lastOrientationTimestamp + sendInterval < Date.now()) {
+
+    lastOrientationTimestamp += sendInterval;
+
+    beta = Math.round(e.beta) * sendInterval;
+
+    ws.send("scroll:" + (beta * -0.0001).toString());
+  }
+}
+
 
 function flushSendBuffer() {
   if (sendBuffer.length >= sendBatchSize) {
@@ -260,40 +151,104 @@ function flushSendBuffer() {
   return false;
 }
 
-function sendPosition(evt) {
+function sendPosition(e) {
   if (posCounter++ % sendEveryNth)
     return;
-  sendBuffer.push("" + evt.clientX / window.innerWidth + "," + evt.clientY / window.innerHeight);
-  if (!lastSentMs || lastSentMs + mousePositionInterval < Date.now()) {
+  sendBuffer.push("" + e.clientX / window.innerWidth + "," + e.clientY / window.innerHeight);
+  if (!lastSentMs || lastSentMs + sendInterval < Date.now()) {
     if (flushSendBuffer())
       lastSentMs = Date.now();
   } else {
     clearTimeout(lastPosition);
-    lastPosition = setTimeout(flushSendBuffer, mousePositionInterval);
+    lastPosition = setTimeout(flushSendBuffer, sendInterval);
   }
 }
 
-var lastScrollPos;
+function sendScrolling(e) {
 
-function sendScrolling(evt) {
-
-  if (!lastSentMs || lastSentMs + mousePositionInterval < Date.now()) {
+  if (!lastSentMs || lastSentMs + sendInterval < Date.now()) {
     lastSentMs = Date.now();
-    sendScrollingHelper(evt);
+    sendScrollingHelper(e);
   } else {
     clearTimeout(lastPosition);
     lastPosition = setTimeout(function() {
-      sendScrollingHelper(evt);
-    }, mousePositionInterval);
+      sendScrollingHelper(e);
+    }, sendInterval);
   }
 }
 
-function sendScrollingHelper(evt) {
-  var newScrollPos = evt.clientY / window.innerHeight;
+function sendScrollingHelper(e) {
+  var newScrollPos = e.clientY / window.innerHeight;
 
   if (lastScrollPos && newScrollPos - lastScrollPos !== 0) {
     ws.send("scroll:" + (newScrollPos - lastScrollPos).toString());
   }
 
   lastScrollPos = newScrollPos;
+}
+
+function setLatency(value) {
+  ws.send("setLatency:" + (value || 0));
+}
+
+function setHz(value) {
+  var hz = parseFloat(value);
+  if (!hz) {
+    sendInterval = 0;
+  } else {
+    // Convert Hz to interval
+    sendInterval = 1000 / hz;
+  }
+}
+
+function setBatchSize(value) {
+  sendBatchSize = value || 1;
+  sendBuffer.length = 0;
+}
+
+function setNthEvent(value) {
+  sendEveryNth = value || 1;
+  sendBuffer.length = 0;
+}
+
+
+var statusMessages = {
+  'disconnected': document.getElementById('disconnected'),
+  'no-client': document.getElementById('no-client'),
+  'gyro-unsupported': document.getElementById('gyro-unsupported'),
+  'gyro-off': document.getElementById('gyro-off'),
+  'gyro-on': document.getElementById('gyro-on')
+};
+
+function setStatus(value) {
+
+  for (var i in statusMessages) {
+    statusMessages[i].style.display = 'none';
+  }
+
+  switch (value) {
+    case 'disconnected':
+    case 'no-client':
+    case 'gyro-off':
+    case 'gyro-on':
+      statusMessages[value].style.display = 'block';
+      break;
+
+    case 'connected':
+      if (!window.DeviceOrientationEvent) {
+        statusMessages['gyro-unsupported'].style.display = 'block';
+        return;
+      }
+      if (gyroScrolling) {
+        statusMessages['gyro-on'].style.display = 'block';
+      } else {
+        statusMessages['gyro-off'].style.display = 'block';
+      }
+      break;
+  }
+
+}
+
+function showDebugBar(value) {
+  document.getElementById('debug-bar').style.display = (value ? 'flex' : 'none');
 }

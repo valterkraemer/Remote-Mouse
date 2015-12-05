@@ -51,7 +51,7 @@
 
                   if (remotes[roomcode] && remotes[roomcode].length) {
                     remotes[roomcode].forEach(function(remote) {
-                      remote.sendToSocket('disconnected:');
+                      remote.sendToSocket('no-client:');
                     });
                   }
                 }, latency);

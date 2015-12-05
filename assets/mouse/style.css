@@ -1,4 +1,9 @@
 html,
+body {
+    overflow: auto;
+}
+
+html,
 body,
 #container {
     width: 100%;
@@ -7,16 +12,50 @@ body,
     padding: 0;
 }
 
-#status {
+#debug-bar {
+    display: none;
+    flex-wrap: wrap;
+    width: 100%;
+    background-color: #DDD;
+    border-bottom: 1px solid #000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 0px 3px 3px 3px;
+}
+
+#container > div {
+    display: none;
+
     top: 50%;
     position: absolute;
-    background-color: #FFF;
-    z-index: 10001;
-    border: 1px;
-    box-shadow: 0 3px 9px rgba(0 0 0 .5);
-    border-radius: 5px;
     text-align: center;
     width: 100%;
     padding: 10px;
     box-sizing: border-box;
+}
+
+#container #disconnected {
+    display: block;
+}
+
+.input {
+    display: flex;
+    width: 150px;
+    margin-right: 10px;
+    padding-top: 3px;
+}
+
+.input .title, .input .unit {
+    flex: 0 0 auto;
+}
+
+.input input {
+    flex: 1 1 auto;
+}
+
+.debug-bar-toggle {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
 }
