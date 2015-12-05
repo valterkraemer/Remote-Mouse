@@ -93,56 +93,33 @@
 
   document.body.appendChild(pointer);
 
-  var pixelStep = 10;
-  var log = true;
   var roomcode;
 
-  var url = ((window.location.protocol === "https:") ? "wss:" : "ws:") + window.__remoteMouseBaseUrl;
+  var baseUrl = window.__remoteMouseBaseUrl;
+  var url = ((window.location.protocol === "https:") ? "wss:" : "ws:") + baseUrl;
   var ws = new WebSocket(url);
 
 
   ws.onopen = function() {
-    if (log) console.log("WS connected");
     var session = sessionStorage.getItem('remote-mouse-roomcode') || '';
     ws.send('create:' + session);
   };
 
   ws.onmessage = function(msgEvent) {
     var message = msgEvent.data;
-    if (log) console.log('RX: ', message);
 
     var parts = message.split(':');
 
     if (parts.length !== 2) {
-      if (log) console.log('Not valid message');
       return;
     }
 
     var type = parts[0];
     var value = parts[1];
 
-
     switch (type) {
       case 'click':
-        if (log) console.log('click');
-        document.elementFromPoint(pointerLeft() - 1, pointerTop() - 1).click();
-        break;
-      case 'step':
-        switch (value) {
-          case 'left':
-            pointer.style.left = (pointerLeft() - pixelStep) + 'px';
-            break;
-          case 'up':
-            pointer.style.top = (pointerTop() - pixelStep) + 'px';
-            break;
-          case 'right':
-            pointer.style.left = (pointerLeft() + pixelStep) + 'px';
-            break;
-          case 'down':
-            pointer.style.top = (pointerTop() + pixelStep) + 'px';
-            break;
-          default:
-        }
+        click();
         break;
       case 'pos':
         processPos(value);
@@ -150,14 +127,11 @@
       case 'scroll':
         document.body.scrollTop = document.body.scrollTop + window.innerHeight * value;
         break;
-      case 'log':
-        log = (value === 'true');
-        break;
       case 'roomcode':
         roomcode = value;
         sessionStorage.setItem('remote-mouse-roomcode', value);
-        var protocol = (window.__remoteMouseBaseUrl === '//localhost:3000' ? 'http:' : 'https:');
-        var roomUrl = protocol + window.__remoteMouseBaseUrl + '/' + roomcode;
+        var protocol = (baseUrl === '//localhost:3000' ? 'http:' : 'https:');
+        var roomUrl = protocol + baseUrl + '/' + roomcode;
         urlText.innerHTML = roomUrl;
         qrCode.setAttribute('src', 'https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&qzone=1&margin=10&size=120x120&ecc=L&data=' + encodeURIComponent(roomUrl));
         break;
@@ -170,23 +144,15 @@
         pointer.style.display = 'none';
         break;
       default:
-        console.log(message);
-        if (log) console.log('Not valid type');
+        console.log('Not valid message', message);
     }
   };
 
-  function parsePx(value, ref) {
-    if (value.indexOf('%') != -1)
-      return parseInt(parseFloat(value.split('%')[0]) / 100 * ref);
-    return parseInt(value.split('px')[0]);
-  }
+  function click() {
+    var left = window.innerWidth * parseFloat(pointer.style.left.slice(0, -1) / 100);
+    var top = window.innerHeight * parseFloat(pointer.style.top.slice(0, -1) / 100);
 
-  function pointerLeft() {
-    return parsePx(pointer.style.left, window.innerWidth);
-  }
-
-  function pointerTop() {
-    return parsePx(pointer.style.top, window.innerHeight);
+    document.elementFromPoint(parseInt(left - 1, 10), parseInt(top - 1, 10)).click();
   }
 
   function processPos(value) {

@@ -89,7 +89,6 @@
             case 'step':
             case 'click':
             case 'pos':
-            case 'log':
             case 'scroll':
               ws.sendToClient(message);
               break;
@@ -144,78 +143,6 @@
 
       return roomcode;
     }
-
-
-    /*console.log("New connection");
-
-      var latency = 0;
-      var roomcode = getRoomCode();
-
-      channels[roomcode] = ws;
-      wss.broadcast('roomcode:' + roomcode, ws);
-
-      ws.on('message', function incoming(message) {
-
-        setTimeout(function() {
-
-          console.log('message:', message);
-
-          var parts = message.split(':');
-
-          if (parts.length !== 2) {
-            return console.log('Not valid message');
-          }
-
-          var type = parts[0];
-          var value = parts[1];
-
-          if (!value) {
-            return console.error('Value not defined');
-          }
-
-          switch (type) {
-            case 'register':
-              channels[value] = ws;
-              break;
-            case 'join':
-              ws.channel = value;
-              break;
-            case 'step':
-            case 'click':
-            case 'pos':
-            case 'log':
-              wss.broadcast(message, ws);
-              break;
-            case 'ping':
-              ws.send('pong', function(err) {
-                if (err) console.error('err', err);
-              });
-              break;
-            case 'setLatency':
-              latency = Math.max(value, 0);
-              break;
-            default:
-              console.error('Message type "' + type + '" not supported');
-          }
-
-        }, latency);
-
-      });
-
-    });
-
-    wss.broadcast = function(data, ws) {
-
-      console.log('ws', ws.channel);
-
-      connections[ws.channel].send(data, function(err) {
-        if (err) {
-          return console.error('No host connected');
-        }
-      });
-    };*/
-
-
 
   };
 
