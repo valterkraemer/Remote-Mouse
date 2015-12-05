@@ -74,3 +74,8 @@ What have we learned:
 	* Little code, alot happends.
 
 Project setup, github push to heroku.
+
+Usage possibilities:
+* remote control of presentations
+* remote assistance of web app use
+* recording user actions on a website, e.g. for usability evaluation, UI research, trials (if the functionality would be "flipped" so that the current remote controller logic would run on an arbitrary website)
