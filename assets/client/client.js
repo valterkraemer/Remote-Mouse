@@ -85,8 +85,8 @@
 
   pointer.style.cssText = [
     'position: fixed',
-    'height: 20px',
-    'width: 16px',
+    'height: 40px', // 20px
+    'width: 32px', // 16px
     'z-index: 100000',
     'display: none'
   ].join(';');
