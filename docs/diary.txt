@@ -104,3 +104,7 @@ position per channel in sessionStorage and restore on join.
 1h: Add QR code
 
 ----
+
+5.12.2015 Valter
+
+9h: Updated debug menu. Tested latency with users. Looked up some browser support stuff. Closure compiler. Clean up code.
