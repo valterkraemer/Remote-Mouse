@@ -85,6 +85,18 @@ K: Gyro times second.
 
 S: How many times a second under normal/extreme use, browser differences.
 
+CPU load on an Intel Core i7-3610QM 2.30GHz (Quad core), Google Chrome
+both controller and client, with local server: ~9%, quite evenly
+distributed accross cores.
+
+Chrome's real time rendering of WebSocket frames is quite resource
+intensive, affects load measuring results considerably.
+
+About 45 messages/sec with the above laptop when the mouse is moving,
+both Chrome and Firefox. Corresponds to about 25kB/s network
+traffic. No significant difference noticed whether moving the mouse
+fast or slowly/normally --> capped by browser mousemove event limit?
+
 K: Browser support
 
 * Sockets
