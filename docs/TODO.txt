@@ -112,7 +112,7 @@ K: Browser support
 | 11 |    6    |   7    |    -   |   15  |     4.3    |        3        |
 
 What have we learned:
-	* Really efficient.
+	* Websockets are really efficient.
 	* Pure javascript
 	* Set up project.
 	* Using sockets
