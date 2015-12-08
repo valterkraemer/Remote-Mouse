@@ -157,7 +157,7 @@
   function sendPosition(e) {
     if (posCounter++ % sendEveryNth)
       return;
-    //sendBuffer.push("" + e.clientX / window.innerWidth + "," + e.clientY / window.innerHeight);
+    sendBuffer.push("" + e.clientX / window.innerWidth + "," + e.clientY / window.innerHeight);
     if (!lastSentMs || lastSentMs + sendInterval < Date.now()) {
       if (flushSendBuffer())
         lastSentMs = Date.now();
