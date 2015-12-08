@@ -92,10 +92,10 @@ distributed accross cores.
 Chrome's real time rendering of WebSocket frames is quite resource
 intensive, affects load measuring results considerably.
 
-About 45 messages/sec with the above laptop when the mouse is moving,
-both Chrome and Firefox. Corresponds to about 25kB/s network
-traffic. No significant difference noticed whether moving the mouse
-fast or slowly/normally --> capped by browser mousemove event limit?
+About 80-90 messages/sec submited with the above laptop when the mouse
+is moving at normal speed, ~120 when fast. WS packet size about
+40bytes with batch size 1. Causes network traffic (both ways included)
+about ~50-60kB/s. Does not compute, 120*40=4800 --> overhead?
 
 K: Browser support
 
