@@ -12,11 +12,19 @@
     var clients = {};
     var remotes = {};
 
+    var messages = 0;
+    setInterval(function() {
+      console.log(messages + " msgs/sec");
+      messages = 0;
+    }, 1000);
+
     wss.on('connection', function(ws) {
 
       var latency = 0;
 
       ws.on('message', function(message) {
+
+        messages++;
 
         setTimeout(function() {
 
