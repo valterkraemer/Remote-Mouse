@@ -23,24 +23,34 @@ When we started out we wanted to explore Websockets and come up with a neat use 
 
 -------------- VILLE --------------
 
+- To find out how our implementation works and what are the things
+  affecting it we implemented a debug bar in the remote.
+
+  
+
 - Debug bar to test different parameters
 	* esim. latency
 	* browser dev tools not sufficient
-	* chrome artifical latency not working for websockets
+	* chrome netwrork throttling not working for websockets
 
-- Thought of optimizing the communication using binary websocket frames, but not neccessary due to now already works on GPRS speeds. And the parsing overhead caused by the use of the text format protocol/frames is so minimal that based on that it was already clear that binary protocol wouldn't make much of a difference fro mthat point of view either.
+- Thought of optimizing the communication using binary websocket
+  frames, but not neccessary due to now already works on GPRS
+  speeds. And the parsing overhead caused by the use of the text
+  format protocol/frames is so minimal that based on that it was
+  already clear that binary protocol wouldn't make much of a
+  difference fro mthat point of view either.
 
 - normal/extreme use
 
-- CPU load on an Intel Core i7-3610QM 2.30GHz (Quad core), Google Chrome
-both controller and client, with local server: ~9%, quite evenly
-distributed accross cores.
+- CPU load on an Intel Core i7-3610QM 2.30GHz (Quad core), Google
+Chrome both controller and client, with local server: ~9%, quite
+evenly distributed accross cores.
 
 - Chrome's real time rendering of WebSocket frames is quite resource
 intensive, affects load measuring results considerably.
 
-- About 80-90 messages/sec submited with the above laptop when the mouse
-is moving at normal speed, ~120 when fast. WS packet size about
+- About 80-90 messages/sec submited with the above laptop when the
+mouse is moving at normal speed, ~120 when fast. WS packet size about
 40bytes with batch size 1. Causes network traffic (both ways included)
 about ~50-60kB/s. Does not compute, 120*40=4800 --> overhead?
 
