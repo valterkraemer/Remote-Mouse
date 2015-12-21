@@ -107,18 +107,33 @@ navigate in the slides.
 
 \newcommand*\rot{\rotatebox{90}}
 
-\begin{tabular}{rlrlrl}
-  \rot{Latency} & \rot{Grade} & \rot{Latency} & \rot{Grade} & \rot{Latency} & \rot{Grade} \\
-  \multicolumn{2}{c}{User 1} & \multicolumn{2}{c}{User 2} & \multicolumn{2}{c}{User 3} \\
-  \hline
-  500 & 2  & 400 & 2  & 0 & 8   \\
-  200 & 4  & 100 & 5  & 500 & 1 \\
-  100 & 5  & 300 & 4  & 300 & 4 \\
-  0 & 6    & 0 & 8    & 100 & 8 \\
-  100 & 6  & 100 & 8  & 0 & 9   \\
-  0 & 8    & 0 & 8    & 200 & 7 \\
-  \hline
-\end{tabular}
+\begin{center}
+  \begin{tabular}{rlrlrl}
+    \rot{Latency} & \rot{Grade} & \rot{Latency} & \rot{Grade} & \rot{Latency} & \rot{Grade} \\
+    \multicolumn{2}{c}{User 1} & \multicolumn{2}{c}{User 2} & \multicolumn{2}{c}{User 3} \\
+    \hline
+    500 & 2  & 400 & 2  & 0 & 8   \\
+    200 & 4  & 100 & 5  & 500 & 1 \\
+    100 & 5  & 300 & 4  & 300 & 4 \\
+    0 & 6    & 0 & 8    & 100 & 8 \\
+    100 & 6  & 100 & 8  & 0 & 9   \\
+    0 & 8    & 0 & 8    & 200 & 7 \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\begin{center}
+  \begin{tabular}{rll}
+    Network & Server & Latency \\
+    \hline
+    2G & Heroku & 500 \\
+    3G & Heroku & 70 \\
+    LTE & Heroku & 70 \\
+    Wi-Fi & Heroku & 70 \\
+    Wi-Fi & local & 5 \\
+    \hline
+  \end{tabular}
+\end{center}
 
 \section{Analysis}
 
