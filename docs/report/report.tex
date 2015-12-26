@@ -1,7 +1,7 @@
-\documentclass[12pt,a4paper,english,oneside]{article}
+\documentclass[a4paper,english,twocolumn]{article}
 
 \usepackage[utf8]{inputenc}
-\usepackage{ae,aecompl,url,natbib,multicol,graphicx}
+\usepackage{ae,aecompl,url,natbib,graphicx}
 \usepackage[english]{babel}
 
 \parskip 1ex
@@ -32,8 +32,6 @@ Aalto University}
 \date{\today}
 
 \maketitle
-
-\begin{multicols}{2}
 
 % ---------------------------------------------------------------------
 
@@ -97,7 +95,7 @@ HTML presentations such as
 reveal.js\footnote{\url{http://lab.hakim.se/reveal-js}} from touch
 based devices. The controlling device sends POST requests to the
 server that forwards them to the controlled device using long polling
-by the controlled device. Remote.io is using touch events for their
+by the controlled device. Remot.io is using touch events for their
 remote. Swipe gestures translate to the directions the user wants to
 navigate in the slides.
 
@@ -105,43 +103,88 @@ navigate in the slides.
 
 [TODO]
 
-\newcommand*\rot{\rotatebox{90}}
 
-\begin{center}
-  \begin{tabular}{rlrlrl}
-    \rot{Latency} & \rot{Grade} & \rot{Latency} & \rot{Grade} & \rot{Latency} & \rot{Grade} \\
-    \multicolumn{2}{c}{User 1} & \multicolumn{2}{c}{User 2} & \multicolumn{2}{c}{User 3} \\
-    \hline
-    500 & 2  & 400 & 2  & 0 & 8   \\
-    200 & 4  & 100 & 5  & 500 & 1 \\
-    100 & 5  & 300 & 4  & 300 & 4 \\
-    0 & 6    & 0 & 8    & 100 & 8 \\
-    100 & 6  & 100 & 8  & 0 & 9   \\
-    0 & 8    & 0 & 8    & 200 & 7 \\
-    \hline
-  \end{tabular}
-\end{center}
-
-\begin{center}
-  \begin{tabular}{rll}
-    Network & Server & Latency \\
-    \hline
-    2G & Heroku & 500 \\
-    3G & Heroku & 70 \\
-    LTE & Heroku & 70 \\
-    Wi-Fi & Heroku & 70 \\
-    Wi-Fi & local & 5 \\
-    \hline
-  \end{tabular}
-\end{center}
 
 \section{Analysis}
 
 [TODO]
 
+To test the subjective effect of latency on user experience, a test
+with three users was conducted. The users were first asked to use an
+Apple Magic
+Trackpad\footnote{\url{https://en.wikipedia.org/wiki/Magic_Trackpad}}
+to get a feeling of a local, low latency user experience. Then, they
+were asked to use Remote Mouse with the latency throttle set to
+varying settings. The latency settings were shuffled, i.e. not
+presented in increasing or decreasing order in order to avoid users'
+expectations affecting the results. Users were tasked to grade the
+quality of the pointer control experience in scale from 0 to 10, with
+grade 0 being the lowest one, equal to unusable, and 10 being equally
+good as the Magic Trackpad.
+
+\newcommand*\rot{\rotatebox{90}}
+
+\begin{table} \centering
+  \begin{tabular}{rlrlrl}
+    \rot{Latency} & \rot{Grade} & \rot{Latency} & \rot{Grade} & \rot{Latency} & \rot{Grade} \\
+    \multicolumn{2}{c}{User 1} & \multicolumn{2}{c}{User 2} & \multicolumn{2}{c}{User 3} \\
+    \hline
+    500 ms & 2  & 400 ms & 2  & 0 ms   & 8 \\
+    200 ms & 4  & 100 ms & 5  & 500 ms & 1 \\
+    100 ms & 5  & 300 ms & 4  & 300 ms & 4 \\
+      0 ms & 6    & 0 ms & 8  & 100 ms & 8 \\
+    100 ms & 6  & 100 ms & 8  & 0 ms   & 9 \\
+      0 ms & 8    & 0 ms & 8  & 200 ms & 7 \\
+    \hline
+  \end{tabular}
+  \caption{Subjective user test results}
+\end{table}
+
+All three users rated the experience to belong in the middle of the
+scale at approximately 250 ms latency. 500 ms was classified as barely
+usable, and 0 to 100 ms quite acceptable.
+
+To aid in estimating how these estimates translate to use of Remote
+Mouse in different network setups, table~\ref{table:setuplatencies}
+lists the typical latencies when the service is running in Heroku and
+locally, and when it is being used over different network
+connections.
+
+\begin{table} \centering
+  \begin{tabular}{rll}
+    Network & Server & Latency \\
+    \hline
+    2G & Heroku    & 500 ms \\
+    3G & Heroku    & 70 ms \\
+    LTE & Heroku   & 70 ms \\
+    Wi-Fi & Heroku & 70 ms \\
+    Wi-Fi & local  & 5 ms \\
+    \hline
+  \end{tabular}
+  \caption{Typical setup latencies}
+  \label{table:setuplatencies}
+\end{table}
+
 \section{Conclusions}
 
 [TODO]
+
+Latency of a network connection is much more important for
+satisfactory user experience with Remote Mouse than its
+bandwidth. Bandwidth needs of the application are already quite modest
+with the current implementation, and could be further reduced, for
+example by using a more efficient binary WebSocket message payloads,
+and compression. However, given the already low requirements and
+possibility of getting negative effects on latency from optimizing for
+bandwidth usage, these possibilities were not pursued as they are not
+likely to result in significant overall user experience improvements,
+if any.
+
+Based on the test conducted as well as the authors' own experiences,
+the latency goal for acceptable Remote Mouse user experience should be
+set to the 0 to 100 ms range. According to our test results, these
+kinds of latencies can be achieved with 3G and better mobile network
+connections; 2G connectivity is not sufficient.
 
 % ---------------------------------------------------------------------
 
@@ -150,7 +193,5 @@ navigate in the slides.
 \bibliography{references}
 
 % ---------------------------------------------------------------------
-
-\end{multicols}
 
 \end{document}
