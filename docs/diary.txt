@@ -108,3 +108,23 @@ position per channel in sessionStorage and restore on join.
 5.12.2015 Valter
 
 9h: Updated debug menu. Tested latency with users. Looked up some browser support stuff. Closure compiler. Clean up code.
+
+----
+
+21.12.2015 Ville
+
+1h: Report writing
+
+----
+
+26.12.2015 Ville
+
+1h: Report writing
+
+----
+
+27.12.2015 Ville
+
+2h: Report writing
+
+----

@@ -18,6 +18,8 @@
 
 \bibpunct{(}{)}{;}{a}{,}{,}
 
+\newcommand*\rot{\rotatebox{90}}
+
 % ---------------------------------------------------------------------
 
 \begin{document}
@@ -103,11 +105,51 @@ navigate in the slides.
 
 [TODO]
 
-
-
 \section{Analysis}
 
 [TODO]
+
+The most important technology for both controller and controllee sides
+of the Remote Mouse implementation is WebSockets. According to
+caniuse.com, it is fully supported in all current major browsers since
+2013\footnote{\url{http://caniuse.com/#feat=websockets}}. The Node.js
+ws library used on the server side has had releases available from
+GitHub since
+2011\footnote{\url{https://github.com/websockets/ws/releases}}.
+
+The DeviceOrientation API used to implement scrolling based on
+controller orientation is also well supported in current browsers to
+the extent required by Remote Mouse. According to
+caniuse.com\footnote{\url{http://caniuse.com/#feat=deviceorientation}},
+only Microsoft Edge has full support for it, most other browsers have
+partial support, and the desktop version of Safari has none. Safari's
+non-support is not a major problem, because controller devices are
+expected to be mobile ones, and the iOS Safari supports the API.
+
+Table~\ref{table:caniuse} summarizes support for WebSockets and
+DeviceOrientetation in major browsers. The versions listed are the
+first ones in which full support for the technology appeared, followed
+by the release year in parenthesis. If full support is not yet
+available, the version number in parenthesis indicates the first
+version with partial support.
+
+\begin{table} \centering
+  \begin{tabular}{rcc}
+    & \rot{WebSockets} & \rot{DeviceOrientation} \\
+    \hline
+    IE & 10 (2012) & (11) (2013) \\
+    Edge & 12 (2015) & (12) (2015) \\
+    Firefox & 11 (2012) & (6) (2011) \\
+    Chrome & 16 (2011) & (7) (2010) \\
+    Safari & 7 (2013) & - \\
+    iOS Safari & 6.1 (2013) & (4.3) (2011) \\
+    Android Browser & 4.4 (2013) & (3) (2011) \\
+    Chrome for Android & 47 (2015) & (47) (2015) \\
+    \hline
+  \end{tabular}
+  \caption{caniuse.com: WebSockets and DeviceOrientation support in selected browsers}
+  \label{table:caniuse}
+\end{table}
 
 To test the subjective effect of latency on user experience, a test
 with three users was conducted. The users were first asked to use an
@@ -121,8 +163,6 @@ expectations affecting the results. Users were tasked to grade the
 quality of the pointer control experience in scale from 0 to 10, with
 grade 0 being the lowest one, equal to unusable, and 10 being equally
 good as the Magic Trackpad.
-
-\newcommand*\rot{\rotatebox{90}}
 
 \begin{table} \centering
   \begin{tabular}{rlrlrl}
@@ -138,11 +178,13 @@ good as the Magic Trackpad.
     \hline
   \end{tabular}
   \caption{Subjective user test results}
+  \label{table:userresults}
 \end{table}
 
 All three users rated the experience to belong in the middle of the
 scale at approximately 250 ms latency. 500 ms was classified as barely
-usable, and 0 to 100 ms quite acceptable.
+usable, and 0 to 100 ms quite acceptable. User test data is included
+in table~\ref{table:userresults}.
 
 To aid in estimating how these estimates translate to use of Remote
 Mouse in different network setups, table~\ref{table:setuplatencies}
@@ -165,6 +207,8 @@ connections.
   \label{table:setuplatencies}
 \end{table}
 
+[TODO: something about bandwidth usage, single WS message per MTU?]
+
 \section{Conclusions}
 
 [TODO]
@@ -185,6 +229,28 @@ the latency goal for acceptable Remote Mouse user experience should be
 set to the 0 to 100 ms range. According to our test results, these
 kinds of latencies can be achieved with 3G and better mobile network
 connections; 2G connectivity is not sufficient.
+
+The technology stack related to WebSockets is stable and ready for
+production use in both browser and server side. We did not run into
+any issues on either browser or server side during the Remote Mouse
+development process that would have been related to WebSockets
+implementations. On the contrary, we found the APIs and
+implementations very easy to use, and their performance matches or
+exceeds the requirements for Remote Mouse.
+
+A prominent use case for Remote Mouse is remote control of web based
+presentations and applications, using for example a laptop computer to
+host the presentation or web application and displaying its screen to
+viewers, while controlling it remotely from a mobile device. Because
+the contents of the controllee screen are not visible in the
+controller, this use case is in our implementation limited to setups
+where the user operating the controller can see the controllee
+screen. If the controllee screen would be available for remote
+viewing, use cases like for example remote assistance of web
+application use would be quite relevant. The technology and principle
+of tracking the pointer or touch movements could also be used for
+recording user actions on a web site, for example for usability
+evaluation, user interface research, and trials.
 
 % ---------------------------------------------------------------------
 
