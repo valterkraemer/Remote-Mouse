@@ -103,7 +103,29 @@ navigate in the slides.
 
 \section{Results}
 
-[TODO]
+The controller is a web page. Most of it is empty, serving as the
+control area.
+
+For non-touch devices, the document has mousemove and click event
+handlers. Each mousemove event results in the pointer position being
+sent to the server in a WebSocket message.
+
+For touch devices, the document contains event listeners
+for touchstart, touchmove, and touchend.
+
+Positions are sent as pairs of floating point numbers representing the
+relative left and top position offsets of the event in percents,
+proportional to the dimensions of the controller window. The
+controllee moves the virtual pointer according to these values, by
+using them as percentages for the virtual pointer's left and top CSS
+properties.
+
+WebSocket messages for click events contain only the information that
+the controller requests a click; there is no position information
+included with it. The controllee locates the element which is the
+target of the click based on its own virtual pointer position, using
+the Document.elementFromPoint CSSOM View Module
+method\footnote{\url{http://www.w3.org/TR/cssom-view/}}.
 
 \section{Analysis}
 
