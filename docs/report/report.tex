@@ -26,12 +26,9 @@
 
 \begin{document}
 
-\title{T-111.5360 Report:\\[5mm]
-Remote Mouse}
+\title{T-111.5360 Report: Remote Mouse}
 
-\author{Valter Kraemer 84669F \\
-  Ville Skyttä 42818N \\
-Aalto University}
+\author{Valter Kraemer, valter.kraemer@aalto.fi\\Ville Skyttä, ville.skytta@iki.fi\\Aalto University}
 
 \date{\today}
 
@@ -53,35 +50,32 @@ web page, controlled from another web device. WebSockets is used as
 the communications technology between the devices, through an
 intermediate server.
 
-[TODO: more]
-
 \section{Related work}
 
 \citet{bassbouss} address multi-screen web application development and
 the transformation of traditional web applications to multi-screen
 capabilities. Both the current and proposed multi-screen application
 models utilize WebSocket in communications between clients (screens)
-and servers. [TODO: more about this and how it is related to our stuff]
+and servers.
 
 Agar.io\footnote{\url{http://agar.io/}} is a massively multiplayer
-online game. In a nutshell, players control cells in a petri dish,
-attempting to grow larger by consuming pellets and other cells, and
-avoiding being consumed by other cells. The game is available for web
-browsers on its website, and Android and iOS versions are available
-for mobile devices. The web version uses an HTML canvas and its 2D
-context for rendering, as well as HTML animation frames. Communication
-between the browser and the server is implemented using
-WebSockets. Data is transferred using WebSocket binary frames
-(WebSocket opcode 2), which are constructed using the ECMAScript 6
-ArrayBuffer and DataView objects. Due to the binary nature of the
-data, the exact semantics of it are not available. During gameplay,
-the traffic consists of on the order of 50 WebSocket frames per
-second, with their sizes ranging approximately from a few to 200
-bytes.
+online game. Players control cells in a petri dish, attempting to grow
+larger by consuming pellets and other cells, and avoiding being
+consumed by other cells. The game is available for web browsers on its
+website, and Android and iOS versions are available for mobile
+devices. The web version uses an HTML canvas and its 2D context for
+rendering, as well as HTML animation frames. Communication between the
+browser and the server is implemented using WebSockets. Data is
+transferred using WebSocket binary frames (WebSocket opcode 2), which
+are constructed using the ECMAScript 6 ArrayBuffer and DataView
+objects. Due to the binary nature of the data, the exact semantics of
+it are not available. During gameplay, the traffic consists of on the
+order of 50 WebSocket frames per second, with their sizes ranging
+approximately from a few to 200 bytes.
 
 YouTube has a feature with which it is possible to control another
 YouTube window's video controls from another screen, such as a
-computer or a mobile device. It is primarly intended for controlling
+computer or a mobile device. It is primarily intended for controlling
 YouTube on smart TVs, but can also be used in a browser. The
 controlled screen\footnote{\url{http://www.youtube.com/tv}} is
 operated by its paired
@@ -114,11 +108,12 @@ can be invoked directly from the bookmarks.
 
 There are three versions of the bookmarklet available. The first two,
 heroku and localhost, load the controlling JavaScript code from and
-communicate using WebSockets with the respective server. The third
-one, heroku inline, is the same as the normal heroku one with the
-exception that it contains the entire JavaScript code in the
-bookmarklet instead of causing it to be loaded from the server on
-demand. The inlined code has been minified using the Google Closure
+communicate using WebSockets with the respective server, one hosted at
+Heroku, or one running locally. The third one, heroku inline, is the
+same as the normal Heroku one with the exception that it contains the
+entire JavaScript code in the bookmarklet instead of causing it to be
+loaded from the server on demand. The inlined code has been minified
+using the Google Closure
 Compiler\footnote{\url{http://closure-compiler.appspot.com/}}.
 
 When the bookmarklet is invoked, a URL for the controller is
@@ -140,11 +135,12 @@ pointer image is displayed on the controllee, and the controller UI is
 shown on the controlling device. Most of the controller window is
 empty and serves as the area for mouse and touch movements.
 
-For non-touch devices, the controller document has mousemove and click
-event handlers. Each mousemove event results in the pointer position
-being sent to the server in a WebSocket message. For touch devices,
-the document contains event listeners for touchstart, touchmove, and
-touchend.
+For non-touch devices, the controller document has \verb!mousemove!
+and \verb!click!  event handlers. Each mousemove event results in the
+pointer position being sent to the server in a WebSocket message. For
+touch devices, the document contains event listeners
+for \verb!touchstart!, \verb!touchmove!, and
+\verb!touchend!.
 
 Positions are sent as pairs of floating point numbers between 0 and 1,
 representing the relative left and top position offsets of the event
@@ -160,10 +156,13 @@ target of the click based on its own virtual pointer position, using
 the Document.elementFromPoint CSSOM View Module
 method\footnote{\url{http://www.w3.org/TR/cssom-view/}}.
 
-Scrolling is implemented using the DeviceOrientation
+Scrolling is implemented in two ways. For touch devices, a two-finger
+touch move event translates to scrolling the controllee's view. The
+second scroll implementation is done using the DeviceOrientation
 API\footnote{\url{http://www.w3.org/TR/orientation-event/}}. Tilting
 the controller up and downwards results in scrolling the controllee's
-document accordingly.
+document accordingly. Tilt-scrolling can be toggled on and off with a
+three finger touch event.
 
 To aid in analysis and development, the controller contains a debug
 bar at the top of the controller window. Display of the debug bar is
@@ -192,20 +191,38 @@ well as indicator displaying the current measured latency.
   \label{table:messages}
 \end{table}
 
+The server between the controller and controllee is implemented with
+Node.js, using the Express\footnote{\url{http://expressjs.com/}} and
+ws\footnote{\url{https://github.com/websockets/ws}} modules. The
+server is mostly just a relay that forwards messages from controller
+to controllee, keeps track of sessions between them and notifies them
+about other parties' presence, responds to latency requests, and
+implements artificial latency throttling. Express is included only in
+order to be able to easily serve static files from the same server as
+the WebSockets implementation, otherwise the built-in http module of
+Node.js along with ws would suffice.
+
 The application's development is hosted in a GitHub repository located
 at \url{https://github.com/valterkraemer/Remote-Mouse}. The server can
 be run locally with the command \verb!node app.js! in the project's
 top level directory. By default, it listens on port 3000 and can be
 accessed at \url{http://localhost:3000/}. Pushes to the GitHub
-repository are automatically deployed in the Heroku instance at
+repository are automatically deployed in the public Heroku instance at
 \url{https://remote-mouse.herokuapp.com/}. The Heroku instance uses
 the secure \verb!https! and \verb!wss! protocols in order to make it
 possible to control web applications served over both \verb!http! and
 \verb!https! protocols with it.
 
+The controllee implementation consists of roughly 5 kB of non-minified
+JavaScript code (3 kB minified, embeddable to a bookmarklet) which
+includes the virtual pointer image as a data URL, and a few hundred
+bytes of CSS. The controller side is about 6 kB of non-minified
+JavaScript, and 3 kB of HTML and CSS. The server implementation is
+about 4 kB JavaScript.
+
 \section{Analysis}
 
-[TODO]
+\subsection*{Technology stack}
 
 The most important technology for both controller and controllee sides
 of the Remote Mouse implementation is WebSockets. According to
@@ -225,15 +242,15 @@ non-support is not a major problem, because controller devices are
 expected to be mobile ones, and the iOS Safari supports the API.
 
 Table~\ref{table:caniuse} summarizes support for WebSockets and
-DeviceOrientetation in major browsers. The versions listed are the
-first ones in which full support for the technology appeared, followed
-by the release year in parenthesis. If full support is not yet
-available, the version number in parenthesis indicates the first
-version with partial support.
+DeviceOrientation in major browsers. The versions listed are the first
+ones in which full support for the technology appeared, followed by
+the release year in parenthesis. If full support is not yet available,
+the version number in parenthesis indicates the first version with
+partial support.
 
 \begin{table} \centering
   \begin{tabular}{rcc}
-    & \rot{WebSockets} & \rot{DeviceOrientation} \\
+    & \rot{WebSockets} & \rot{Device-}\rot{Orientation} \\
     \hline
     IE & 10 (2012) & (11) (2013) \\
     Edge & 12 (2015) & (12) (2015) \\
@@ -252,6 +269,8 @@ version with partial support.
 Other browser side technologies besides these two used in Remote Mouse
 are basic ones that can nowadays be assumed to be present in
 practically all browsers.
+
+\subsection*{User experience}
 
 To test the subjective effect of latency on user experience, a test
 with three users was conducted. The users were first asked to use an
@@ -297,6 +316,8 @@ usable, and 0 to 100 ms quite acceptable. User test data is included
 in table~\ref{table:userresults} and visualized in
 figure~\ref{fig:userlatency}.
 
+\subsection*{Performance characteristics}
+
 To aid in estimating how these estimates translate to use of Remote
 Mouse in different network setups, table~\ref{table:setuplatencies}
 lists the typical latencies when the service is running in Heroku and
@@ -318,7 +339,35 @@ connections.
   \label{table:setuplatencies}
 \end{table}
 
-[TODO: something about bandwidth usage, single WS message per MTU?]
+Using Google Chrome, running both the controller and controllee in the
+same instance of the browser on a Intel Core i7-3610QM 2.30GHz Quad
+core laptop running Fedora 23 Linux, and with a local Remote Mouse
+server, results in roughly 9\% CPU usage evenly distributed across
+cores under rapid pointer movements.
+
+When the pointer is being moved at normal speeds in the above laptop
+setup, the Remote Mouse controller sends roughly 80 to 90 WebSocket
+messages per second. Moving the pointer faster increases it up to 120
+messages per second. Each pointer position message is about 40 bytes
+with batch size 1, translating to roughly 5 kB/s bandwidth
+requirement. This requirement would however only be achieved if the
+WebSocket message size was optimally fitted with the network MTU size
+which is rarely if ever the case. Submitting the small message in much
+larger frames results in suboptimal use of network bandwidth.
+
+The debug bar's controls allow examination of how various
+environmental and optimization aspects affect the user
+experience. Decreasing the frequency of sent events decreases network
+bandwidth usage but results in choppier pointer movements observed on
+the controllee. Bundling several position events into one WebSocket
+payload has beneficial networking implications, but without specific
+implementation on the controllee, has the same effect as if only the
+last of the message's position events was sent. This is because the
+controllee browser does not keep up with all CSS positioning events
+resulting from the rapid stream of them coming while the payload is
+being parsed, but just renders the last of them.
+
+\subsection*{Implementation}
 
 The bookmarklet script approach works without any additional
 extensions or plugins installed and thus is very easy to deploy and
@@ -340,9 +389,7 @@ bookmarklet -- such as is done in the heroku inline version of the
 bookmarklet -- works around some of these restrictions but is not a
 universal solution.
 
-\section{Conclusions}
-
-[TODO]
+\section{Conclusions and future work}
 
 Latency of a network connection is much more important for
 satisfactory user experience with Remote Mouse than its
@@ -367,13 +414,21 @@ any issues on either browser or server side during the Remote Mouse
 development process that would have been related to WebSockets
 implementations. On the contrary, we found the APIs and
 implementations very easy to use, and their performance matches or
-exceeds the requirements for Remote Mouse.
+exceeds the requirements for Remote Mouse. We were able to implement
+more functionality than our initial plan included while spending only
+roughly 80\% of the time allotted for implementation in our research
+plan.
 
-Creating a browser extension to replace the bookmarklet script
+We propose two areas for future work with Remote Mouse. First,
+creating a browser extension to replace the bookmarklet script
 injection approach could be a way to overcome its single page and
 content security policy drawbacks. However, that would make it browser
 specific and require deployment and installation of the extension,
-thus weakening its universal usability.
+thus weakening its universal usability. Second, further work on
+processing several batched position events on the controllee in a way
+that the browser would also render all the position movements could
+result in even better performing overall implementation and user
+experience.
 
 A prominent use case for Remote Mouse is remote control of web based
 presentations and applications, using for example a laptop computer to

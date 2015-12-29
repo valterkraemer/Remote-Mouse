@@ -137,6 +137,6 @@ position per channel in sessionStorage and restore on join.
 
 29.12.2015 Ville
 
-2h: Report writing
+5h: Report writing
 
 ----
