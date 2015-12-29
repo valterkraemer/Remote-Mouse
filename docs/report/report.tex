@@ -158,6 +158,19 @@ target of the click based on its own virtual pointer position, using
 the Document.elementFromPoint CSSOM View Module
 method\footnote{\url{http://www.w3.org/TR/cssom-view/}}.
 
+Scrolling is implemented using the DeviceOrientation
+API\footnote{\url{http://www.w3.org/TR/orientation-event/}}. Tilting
+the controller up and downwards results in scrolling the controllee's
+document accordingly.
+
+To aid in analysis and development, the controller contains a debug
+bar at the top of the controller window. Display of the debug bar is
+toggled from the bottom right corner of the controller UI. It contains
+controls for artificially increasing the latency at the server side,
+interval how often to send events to the server, how many events to
+pack in a single WebSocket payload, sending only every n'th event, as
+well as indicator displaying the current measured latency.
+
 \begin{table} \centering
   \begin{tabular}{rl}
     Event & Example message \\
