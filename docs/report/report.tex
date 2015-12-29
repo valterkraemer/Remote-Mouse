@@ -113,12 +113,12 @@ sent to the server in a WebSocket message.
 For touch devices, the document contains event listeners
 for touchstart, touchmove, and touchend.
 
-Positions are sent as pairs of floating point numbers representing the
-relative left and top position offsets of the event in percents,
-proportional to the dimensions of the controller window. The
-controllee moves the virtual pointer according to these values, by
-using them as percentages for the virtual pointer's left and top CSS
-properties.
+Positions are sent as pairs of floating point numbers between 0 and 1,
+representing the relative left and top position offsets of the event
+in percents, proportional to the dimensions of the controller
+window. The controllee moves the virtual pointer according to these
+values, by converting them to percentages for the virtual pointer's
+\verb!left! and \verb!top! CSS properties.
 
 WebSocket messages for click events contain only the information that
 the controller requests a click; there is no position information
@@ -126,6 +126,36 @@ included with it. The controllee locates the element which is the
 target of the click based on its own virtual pointer position, using
 the Document.elementFromPoint CSSOM View Module
 method\footnote{\url{http://www.w3.org/TR/cssom-view/}}.
+
+\begin{table} \centering
+  \begin{tabular}{rl}
+    Event & Example message \\
+    \hline
+    Session request & \verb!create:KJK4B! \\
+    Session response & \verb!roomcode:KJK4B! \\
+    Position change & \verb!pos:0.7245,0.6241! \\
+    Click & \verb!click:left! \\
+    Scroll & \verb!scroll:-0.004555! \\
+    Latency adjustment & \verb!setLatency:10! \\
+    Latency request & \verb!ping:null! \\
+    Latency response & \verb!pong! \\
+    Controllee not present & \verb!error:noClient! \\
+    \hline
+  \end{tabular}
+  \caption{WebSocket message payloads}
+  \label{table:messages}
+\end{table}
+
+The application's development is hosted in a GitHub repository located
+at \url{https://github.com/valterkraemer/Remote-Mouse}. The server can
+be run locally with the command \verb!node app.js! in the project's
+top level directory. By default, it listens on port 3000 and can be
+accessed at \url{http://localhost:3000/}. Pushes to the GitHub
+repository are automatically deployed in the Heroku instance at
+\url{https://remote-mouse.herokuapp.com/}. The Heroku instance uses
+the secure \verb!https! and \verb!wss! protocols in order to make it
+possible to control web applications served over both \verb!http! and
+\verb!https! protocols with it.
 
 \section{Analysis}
 
