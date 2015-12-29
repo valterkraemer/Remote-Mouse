@@ -103,15 +103,44 @@ navigate in the slides.
 
 \section{Results}
 
-The controller is a web page. Most of it is empty, serving as the
-control area.
+Using Remote Mouse starts with going to its front page. Devices that
+are going to be controlled install a bookmarklet that enables control
+by a connected controller. Typically this is carried out by dragging
+the bookmarklet into the browser's bookmarks toolbar or
+equivalent. The bookmarklet must be installed only once; after that it
+can be invoked directly from the bookmarks.
+
+There are three versions of the bookmarklet available. The first two,
+heroku and localhost, load the controlling JavaScript code from and
+communicate using WebSockets with the respective server. The third
+one, heroku inline, is the same as the normal heroku one with the
+exception that it contains the entire JavaScript code in the
+bookmarklet instead of causing it to be loaded from the server on
+demand. The inlined code has been minified using the Google Closure
+Compiler\footnote{\url{http://closure-compiler.appspot.com/}}.
+
+When the bookmarklet is invoked, a URL for the controller is
+presented. By loading this URL, a session between the controller and
+controllee is established and the remote control can start. The URL is
+presented also as a QR Code to make it easy to invoke with mobile
+devices.
+
+\begin{figure}[htb]
+  \begin{center}
+    \includegraphics[scale=0.3]{prompt}
+    \caption{Controller prompt}
+  \end{center}
+\end{figure}
+
+Upon loading the controller session URL, the session starts. Most of
+the controller window is empty and serves as the area for mouse and
+touch movements.
 
 For non-touch devices, the document has mousemove and click event
 handlers. Each mousemove event results in the pointer position being
-sent to the server in a WebSocket message.
-
-For touch devices, the document contains event listeners
-for touchstart, touchmove, and touchend.
+sent to the server in a WebSocket message. For touch devices, the
+document contains event listeners for touchstart, touchmove, and
+touchend.
 
 Positions are sent as pairs of floating point numbers between 0 and 1,
 representing the relative left and top position offsets of the event
@@ -261,6 +290,26 @@ connections.
 
 [TODO: something about bandwidth usage, single WS message per MTU?]
 
+The bookmarklet script approach works without any additional
+extensions or plugins installed and thus is very easy to deploy and
+invoke. However, the script injection approach has two significant
+drawbacks.
+
+First, because the script is injected to the controlled document, it
+does not survive page transitions. Remote control has to be
+re-established for each new web page separately. To ease this, the
+last used room code is stored on the controllee's local web storage
+and the bookmarklet automatically uses it and reconnects when invoked
+in a window or tab where control was previously enabled.
+
+The second drawback is that some sites, such as Facebook and GitHub,
+enable Content Security
+Policies\footnote{\url{http://www.w3.org/TR/CSP/}} that prevent the
+controller script from working. Inlining the whole code in the
+bookmarklet -- such as is done in the heroku inline version of the
+bookmarklet -- works around some of these restrictions but is not a
+universal solution.
+
 \section{Conclusions}
 
 [TODO]
@@ -289,6 +338,12 @@ development process that would have been related to WebSockets
 implementations. On the contrary, we found the APIs and
 implementations very easy to use, and their performance matches or
 exceeds the requirements for Remote Mouse.
+
+Creating a browser extension to replace the bookmarklet script
+injection approach could be a way to overcome its single page and
+content security policy drawbacks. However, that would make it browser
+specific and require deployment and installation of the extension,
+thus weakening its universal usability.
 
 A prominent use case for Remote Mouse is remote control of web based
 presentations and applications, using for example a laptop computer to
