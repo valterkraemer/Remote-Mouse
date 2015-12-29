@@ -134,14 +134,16 @@ devices.
   \end{center}
 \end{figure}
 
-Upon loading the controller session URL, the session starts. Most of
-the controller window is empty and serves as the area for mouse and
-touch movements.
+When a controller joins the session by loading the session URL, the
+popup on the controllee closes and the session starts. A virtual mouse
+pointer image is displayed on the controllee, and the controller UI is
+shown on the controlling device. Most of the controller window is
+empty and serves as the area for mouse and touch movements.
 
-For non-touch devices, the document has mousemove and click event
-handlers. Each mousemove event results in the pointer position being
-sent to the server in a WebSocket message. For touch devices, the
-document contains event listeners for touchstart, touchmove, and
+For non-touch devices, the controller document has mousemove and click
+event handlers. Each mousemove event results in the pointer position
+being sent to the server in a WebSocket message. For touch devices,
+the document contains event listeners for touchstart, touchmove, and
 touchend.
 
 Positions are sent as pairs of floating point numbers between 0 and 1,
