@@ -1,4 +1,4 @@
-report.pdf: report.tex references.bib Makefile
+report.pdf: report.tex references.bib Makefile latency.png prompt.png
 	pdflatex report
 	bibtex report
 	pdflatex report
