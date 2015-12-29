@@ -1,20 +1,20 @@
 \pdfminorversion=4
 
-\documentclass[a4paper,english,twocolumn]{article}
+\documentclass[a4paper,english,twocolumn,9pt]{extarticle}
 
 \usepackage[utf8]{inputenc}
 \usepackage{ae,aecompl,url,natbib,graphicx}
 \usepackage[english]{babel}
 
-\parskip 1ex
+\parskip 0.8ex
 \parindent 0pt
 \evensidemargin 0mm
 \oddsidemargin 0mm
-\textwidth 159.2mm
+\textwidth 161mm
 \topmargin 0mm
 \headheight 0mm
 \headsep 0mm
-\textheight 246.2mm
+\textheight 246mm
 
 \pagestyle{plain}
 
@@ -34,6 +34,22 @@
 
 \maketitle
 
+\begin{abstract}
+With the emergence of WebSockets, web application developers have a
+new, versatile standard technology in their toolbox for developing new
+kinds of web applications. We explore the possibilities it provides
+for implementing a demanding real time communications channel between
+browsers. Our implementation is a virtual mouse pointer on a web page,
+controlled from another web page. We found that WebSockets together
+with a few other modern web technologies provide means for meeting and
+exceeding the requirements for developing an application in this area,
+with relatively modest development effort. The principal findings and
+to a certain extent software developed have potential for
+applicability not only in our chosen primary application area of
+remote web page control, but also in user assistance and usability
+evaluation.
+\end{abstract}
+
 % ---------------------------------------------------------------------
 
 \section{Introduction}
@@ -45,12 +61,12 @@ applications. The WebSocket protocol is standardized by IETF
 \citep{rfc} and W3C \citep{w3c} develops an API to enable its use in
 web pages.
 
-In this report we introduce Remote Mouse, a virtual mouse pointer on a
-web page, controlled from another web device. WebSockets is used as
-the communications technology between the devices, through an
-intermediate server.
+In this report we introduce Remote Mouse, a virtual mouse pointer on
+an arbitrary web page, controlled from another web device. WebSockets
+is used as the communications technology between the devices, through
+an intermediate server.
 
-A public instance of our implementation is available
+A public live instance of our implementation is available
 at \url{https://remote-mouse.herokuapp.com/}.
 
 \section{Related work}
@@ -106,8 +122,8 @@ Using Remote Mouse starts with going to its front page. Devices that
 are going to be controlled install a bookmarklet that enables control
 by a connected controller. Typically this is carried out by dragging
 the bookmarklet into the browser's bookmarks toolbar or
-equivalent. The bookmarklet must be installed only once; after that it
-can be invoked directly from the bookmarks.
+equivalent. The bookmarklet needs to be installed only once; after
+that it can be invoked directly from where it was installed to.
 
 There are three versions of the bookmarklet available. The first two,
 heroku and localhost, load the controlling JavaScript code from and
@@ -122,7 +138,7 @@ Compiler\footnote{\url{http://closure-compiler.appspot.com/}}.
 When the bookmarklet is invoked, a URL for the controller is
 presented. By loading this URL, a session between the controller and
 controllee is established and the remote control can start. The URL is
-presented also as a QR Code to make it easy to invoke with mobile
+presented also as a QR code to make it easy to access with mobile
 devices.
 
 \begin{figure}[htb]
@@ -343,12 +359,12 @@ connections.
 \end{table}
 
 Using Google Chrome, running both the controller and controllee in the
-same instance of the browser on a Intel Core i7-3610QM 2.30GHz Quad
+same instance of the browser on a Intel Core i7-3610QM 2.30GHz quad
 core laptop running Fedora 23 Linux, and with a local Remote Mouse
 server, results in roughly 9\% CPU usage evenly distributed across
 cores under rapid pointer movements.
 
-When the pointer is being moved at normal speeds in the above laptop
+When the pointer is being moved at normal speeds in this laptop
 setup, the Remote Mouse controller sends roughly 80 to 90 WebSocket
 messages per second. Moving the pointer faster increases it up to 120
 messages per second. Each pointer position message is about 40 bytes
@@ -381,16 +397,18 @@ First, because the script is injected to the controlled document, it
 does not survive page transitions. Remote control has to be
 re-established for each new web page separately. To ease this, the
 last used room code is stored on the controllee's local web storage
-and the bookmarklet automatically uses it and reconnects when invoked
-in a window or tab where control was previously enabled.
+and the bookmarklet automatically uses it and reconnects to the same
+session when invoked in a window or tab where control was previously
+enabled.
 
 The second drawback is that some sites, such as Facebook and GitHub,
 enable Content Security
 Policies\footnote{\url{http://www.w3.org/TR/CSP/}} that prevent the
 controller script from working. Inlining the whole code in the
-bookmarklet -- such as is done in the heroku inline version of the
-bookmarklet -- works around some of these restrictions but is not a
-universal solution.
+bookmarklet -- such as is done in the heroku inline version of it --
+works around some of these restrictions but is not a universal
+solution. For example, the script in the bookmarklet might load and
+execute, but not be allowed to contact the Remote Mouse server.
 
 \section{Conclusions and future work}
 
@@ -423,15 +441,15 @@ roughly 80\% of the time allotted for implementation in our research
 plan, while not taking advantage of any browser side third party
 libraries and only very minimal ones at server side.
 
-We propose two areas for future work with Remote Mouse. First,
-creating a browser extension to replace the bookmarklet script
-injection approach could be a way to overcome its single page and
-content security policy drawbacks. However, that would make it browser
-specific and require deployment and installation of the extension,
-thus weakening its universal usability. Second, further work on
-processing several batched position events on the controllee in a way
-that the browser would also render all the position movements could
-result in even better performing overall implementation and user
+We have identified two significant areas for future work on Remote
+Mouse. First, creating a browser extension to replace the bookmarklet
+script injection approach could be a way to overcome its single page
+and content security policy drawbacks. However, that would make it
+browser specific and require deployment and installation of the
+extension, thus weakening its universal usability. Second, further
+work on processing several batched position events on the controllee
+in a way that the browser would also render all the position movements
+could result in even better performing overall implementation and user
 experience.
 
 A prominent use case for Remote Mouse is remote control of web based
