@@ -137,7 +137,7 @@ function devOrientHandler(e) {
 
     lastOrientationTimestamp += sendInterval;
 
-    beta = Math.round(e.beta) * sendInterval;
+    var beta = Math.round(e.beta) * sendInterval;
 
     ws.send("scroll:" + (beta * -0.0001).toString());
   }
